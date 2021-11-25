@@ -1,4 +1,8 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import {Plugin} from "vue";
 
-createApp(App).mount('#app')
+const TippyVue: Plugin = {
+  install(app, ...options: any[]) {
+  }
+}
+
+export default TippyVue

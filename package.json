@@ -6,29 +6,36 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "tippy.js": "^6.3.7",
     "vue": "^3.0.0",
-    "vue-class-component": "^8.0.0-0"
+    "vue-class-component": "^8.0.0-0",
+    "vue-property-decorator": "^9.1.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/mocha": "^5.2.4",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-plugin-unit-mocha": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli": "^5.0.0-rc.1",
+    "@vue/cli-plugin-babel": "^5.0.0-rc.1",
+    "@vue/cli-plugin-eslint": "^5.0.0-rc.1",
+    "@vue/cli-plugin-typescript": "^5.0.0-rc.1",
+    "@vue/cli-plugin-unit-mocha": "5.0.0-rc.1",
+    "@vue/cli-service": "^5.0.0-rc.1",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/test-utils": "^2.0.0-0",
     "chai": "^4.1.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
-    "typescript": "~4.1.5"
+    "typescript": "~4.1.5",
+    "vue-template-compiler": "^2.6.14",
+    "vuepress": "^2.0.0-beta.27"
   }
 }
