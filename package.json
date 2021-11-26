@@ -15,7 +15,7 @@
     "tippy.js": "^6.3.7",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
-    "vue-property-decorator": "^9.1.2"
+    "vue-property-decorator": "^10.0.0-rc.3"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
