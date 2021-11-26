@@ -4,191 +4,207 @@ sidebar: auto
 
 # Demo
 
-Wow! This component is awesome.
+## v-tippy
 
-## Example
+The most basic tooltips can be created purely using the `v-tippy` directive. The value of the directive would either be
+a string or a [tippy props object](https://atomiks.github.io/tippyjs/v6/all-props/). The v-tippy directive is also used
+with no value (`<... v-tippy>`) to mark targets for the `<tippy>` component. 
 
-## Source Code
+<demo>
+  <button v-tippy="'Some content'">Static</button>
+  <button v-tippy="{content: `Seconds: ${seconds}`}">Counter</button>
+  <button v-tippy="{content: 'Some content', trigger:'click', interactive:true}">Click me</button>
+</demo>
 
-A simple tooltip using `v-tippy`:
-<section>
-  <div class="box" v-tippy="'Some content'"></div>
-</section>
+```vue:no-line-numbers
+<button v-tippy="'Some content'">Static</button>
+<button v-tippy="{content: `Seconds: ${seconds}`}">Counter</button>
+<button v-tippy="{content: 'Some content', trigger:'click', interactive:true}">Click me</button>
+```
 
-This triggers on clicking:
-<section>
-  <div class="box" v-tippy="{content: 'Some content', trigger:'click', interactive:true}"></div>
-</section>
+## `<tippy>`
 
-The computed value changes every second:
-<section>
-  <div class="box" v-tippy="{content: tooltipText}"></div>
-</section>
+### Basics
 
-Custom HTML with `<tippy>`
-<section>
-  <div class="box" v-tippy></div>
-  <tippy>
-    HTML: <i>{{tooltipText}}</i>
-  </tippy>
-</section>
+The basic mechanic behind the Tippy component is that you first mark an element with `v-tippy`, then when `<tippy>`
+is mounted it locates that element and attaches itself to it. You can name targets and reference them using the `target`
+property on the Tippy component. The target property also accepts a magic value `"_parent"`, which will target the 
+component's parent.
 
-Multiple tooltips using `v-tippy`
-<section>
-  <div class="box" v-tippy:a></div>
-  <tippy target="a">
-    First box
-  </tippy>
-  <div class="box" v-tippy:b></div>
-  <tippy target="b" placement="right">
-    Second box
-  </tippy>
-</section>
+<demo>
+  <button v-tippy>Boring</button>
+  <tippy>Nothing to see here</tippy>
+  <button v-tippy:fancy>Fancy</button>
+  <tippy target="fancy">HTML: <i>Fancy {{seconds}}</i></tippy>
+  <button>
+    Parent
+    <tippy target="_parent">bound to _parent</tippy>
+  </button>
+</demo>
 
-Repeated targets using proximity
-<section>
-  <div class="box" v-tippy></div>
-  <tippy>First box</tippy>
-  <div class="box" v-tippy></div>
-  <tippy>Second box</tippy>
-  <div class="box" v-tippy></div>
-  <tippy>Third box</tippy>
-</section>
+```vue:no-line-numbers
+<button v-tippy>Boring</button> <!-- the default name is "" -->
+<tippy>Nothing to see here</tippy>
 
-Leading proximity (tooltip should be on the second to last box)
-<section>
-  <div class="box" v-tippy></div>
-  <div class="box" v-tippy></div>
-  <div class="box" v-tippy></div>
-  <tippy>Proximity</tippy>
-  <div class="box" v-tippy></div>
-</section>
+<button v-tippy:fancy>Fancy pants</button>
+<tippy target="fancy">HTML: <i>Fancy {{seconds}}</i></tippy>
 
-Trailing proximity (tooltip should be on the first box)
-<section>
-  <tippy>Proximity</tippy>
-  <div class="box" v-tippy></div>
-  <div class="box" v-tippy></div>
-  <div class="box" v-tippy></div>
-  <div class="box" v-tippy></div>
-</section>
+<button>
+  Parent
+  <tippy target="_parent">bound to _parent</tippy>
+</button>
+```
+
+By default, `<tippy>` will search for `v-tippy` marked *siblings*, starting with the nearest 
+previous siblings, then the nearest next siblings. Searching this way means you can effortlessly create lists of 
+tooltipped elements.
+
+<demo>
+  <button v-tippy>Item 1</button>
+  <tippy>Info 1</tippy>
+  <button v-tippy>Item 2</button>
+  <tippy>Info 2</tippy>
+</demo>
+
+```vue:no-line-numbers
+<button v-tippy>Item 1</button>
+<tippy>Info 1</tippy>
+<button v-tippy>Item 2</button>
+<tippy>Info 2</tippy>
+```
 
 Deep searching using `deep-search`
-<section>
-  <!-- putting this first to verify initialization order -->
-  <tippy target="box" deep-search>That's deep, bro</tippy>
-  <div>
-      <div class="box" v-tippy:box></div>
-  </div>
-</section>
+<demo>
+  <tippy target="box" deep-search>Attachment</tippy>
+  <span class="wrapper">
+    <button v-tippy:box>Deep</button>
+  </span>
+</demo>
 
-Tooltips on the parent using `target="_parent"`
-<section>
-  <div class="parent-wrapper">
-    <div class="box"></div>
-    <tippy target="_parent">
-      Parent
-    </tippy>
-  </div>
-</section>
+```vue:no-line-numbers
+<tippy target="box" deep-search>Attachment</tippy>
+<span class="wrapper">
+  <button v-tippy:box>Deep</button>
+</span>
+```
 
 List without tippy-singleton
-<section>
-  <div class="box" @click="removeSingleton">-</div>
-  <template v-for="i in singletons" style="padding: 0 3px;" :key="i">
-    <div class="box" v-tippy></div>
-    <tippy :extra="{delay: 500}">
-      non-singleton {{i}}
-    </tippy>
-  </template>
-  <div class="box" @click="addSingleton">+</div>
-</section>
+
+<demo>
+  <button v-tippy>1</button>
+  <tippy :extra="{delay: 500}">Item 1</tippy>
+  <button v-tippy>2</button>
+  <tippy :extra="{delay: 500}">Item 2</tippy>
+  <button v-tippy>3</button>
+  <tippy :extra="{delay: 500}">Item 3</tippy>
+</demo>
+
+```vue:no-line-numbers
+<button v-tippy>1</button>
+<tippy :extra="{delay: 500}">Item 1</tippy>
+<button v-tippy>2</button>
+<tippy :extra="{delay: 500}">Item 2</tippy>
+<button v-tippy>3</button>
+<tippy :extra="{delay: 500}">Item 3</tippy>
+```
 
 Singletons with tippy-singleton
-<section>
-  <tippy-singleton :props="{delay: 500}"></tippy-singleton>
-  <div class="box" @click="removeSingleton">-</div>
-  <div class="parent-wrapper"> <!-- pointless nesting just to show that it searches ancestors -->
-    <template v-for="i in singletons" style="padding: 0 3px;" :key="i">
-      <div class="box" v-tippy></div>
-      <tippy singleton>
-        Singleton {{i}}
-      </tippy>
-    </template>
-  </div>
-  <div class="box" @click="addSingleton">+</div>
-</section>
+
+<demo>
+  <tippy-singleton :extra="{delay: 500}"/>
+  <button v-tippy>1</button>
+  <tippy singleton>Item 1</tippy>
+  <button v-tippy>2</button>
+  <tippy singleton>Item 2</tippy>
+  <button v-tippy>3</button>
+  <tippy singleton>Item 3</tippy>
+</demo>
+
+```vue:no-line-numbers
+<tippy-singleton/>
+<button v-tippy>1</button>
+<tippy singleton :extra="{delay: 500}">Item 1</tippy>
+<button v-tippy>2</button>
+<tippy singleton :extra="{delay: 500}">Item 2</tippy>
+<button v-tippy>3</button>
+<tippy singleton :extra="{delay: 500}">Item 3</tippy>
+<!-- or... -->
+<tippy-singleton :extra="{delay: 500}"/>
+<button v-tippy>1</button>
+<tippy singleton>Item 1</tippy>
+<button v-tippy>2</button>
+<tippy singleton>Item 2</tippy>
+<button v-tippy>3</button>
+<tippy singleton>Item 3</tippy>
+```
 
 Multiple peer singletons
-<section>
-  <tippy-singleton :props="{delay: 500}"></tippy-singleton>
-  <template v-for="i in 4" style="padding: 0 3px;" :key="i">
-    <div class="box" v-tippy></div>
-    <tippy singleton>
-      Singleton {{i}}
-    </tippy>
-  </template>
-  <br>
-  <span>Next set</span>
-  <tippy-singleton :props="{delay: 500}"></tippy-singleton>
-  <template v-for="i in 4" style="padding: 0 3px;" :key="i">
-    <div class="box" v-tippy></div>
-    <tippy singleton>
-      Singleton {{i}}
-    </tippy>
-  </template>
-</section>
 
-Nested singletons
-<section>
-  <tippy-singleton :props="{delay: 500}"></tippy-singleton>
-  <template v-for="i in 4" style="padding: 0 3px;" :key="i">
-    <div class="box" v-tippy></div>
-    <tippy singleton>
-      Outer {{i}}
-    </tippy>
-  </template>
-  <div class="parent-wrapper">
-    <tippy-singleton :props="{delay: 500}"></tippy-singleton>
-    <template v-for="i in 2" style="padding: 0 3px;" :key="i">
-      <div class="box" v-tippy></div>
-      <tippy singleton>
-        Inner {{i}}
-      </tippy>
-    </template>
-  </div>
-  <template v-for="i in 4" style="padding: 0 3px;" :key="i">
-    <div class="box" v-tippy></div>
-    <tippy singleton>
-      Outer {{i+4}}
-    </tippy>
-  </template>
-</section>
+<demo>
+  <tippy-singleton :extra="{delay: 500}"/>
+  <button v-tippy>1</button>
+  <tippy singleton>Item 1</tippy>
+  <button v-tippy>2</button>
+  <tippy singleton>Item 2</tippy>
+  <button v-tippy>3</button>
+  <tippy singleton>Item 3</tippy>
+  <tippy-singleton :extra="{delay: 500}"/>
+  <button v-tippy>A</button>
+  <tippy singleton>Item A</tippy>
+  <button v-tippy>B</button>
+  <tippy singleton>Item B</tippy>
+  <button v-tippy>C</button>
+  <tippy singleton>Item C</tippy>
+</demo>
+
+```vue:no-line-numbers
+<tippy-singleton :extra="{delay: 500}"/>
+<button v-tippy>1</button>
+<tippy singleton>Item 1</tippy>
+<button v-tippy>2</button>
+<tippy singleton>Item 2</tippy>
+<tippy-singleton :extra="{delay: 500}"/>
+<button v-tippy>A</button>
+<tippy singleton>Item A</tippy>
+<button v-tippy>B</button>
+<tippy singleton>Item B</tippy>
+```
 
 Named singletons
-<section>
-  <tippy-singleton name="even" :props="{delay: 500}"></tippy-singleton>
-  <tippy-singleton name="odd" :props="{delay: 500}"></tippy-singleton>
-  <template v-for="i in 11" style="padding: 0 3px;" :key="i">
-    <div class="box" v-tippy></div>
+<demo>
+  <tippy-singleton name="even" :extra="{delay: 500}"></tippy-singleton>
+  <tippy-singleton name="odd" :extra="{delay: 500}"></tippy-singleton>
+  <template v-for="i in 11">
+    <button v-tippy>{{i}}</button>
     <tippy :singleton="i % 2 === 0 ? 'even' : 'odd'">
       {{i % 2 === 0 ? 'Even' : 'Odd'}} {{i}}
     </tippy>
   </template>
-</section>
+</demo>
+
+```vue:no-line-numbers
+<tippy-singleton name="even" :extra="{delay: 500}"></tippy-singleton>
+<tippy-singleton name="odd" :extra="{delay: 500}"></tippy-singleton>
+<template v-for="i in 11">
+  <button v-tippy>{{i}}</button>
+  <tippy :singleton="i % 2 === 0 ? 'even' : 'odd'">
+    {{i % 2 === 0 ? 'Even' : 'Odd'}} {{i}}
+  </tippy>
+</template>
+```
 
 Interactive tooltips sometimes require `on-body` to get around z-index, clipping, or styling issues (when the element is
 interactive and doesn't have `on-body`, it'll be placed next to its target, which means it'll inherit the styles of that
 element. Note the style of the
 `on-body` element in the interactive tooltips)
-<section>
-  <div class="box" v-tippy:non-interactive></div>
+<demo>
+  <button v-tippy:non-interactive>non-interactive</button>
   <tippy target="non-interactive">I'm not interactive</tippy>
-  <div class="box" v-tippy:interactive></div>
+  <button v-tippy:interactive>interactive</button>
   <tippy target="interactive" interactive>I'm interactive,<br/>but not <code>on-body</code></tippy>
-  <div class="box" v-tippy:interactive-on-body></div>
+  <button v-tippy:interactive-on-body>on-body</button>
   <tippy target="interactive-on-body" interactive on-body>I'm interactive,<br/>and <code>on-body</code></tippy>
-</section>
+</demo>
 
 ## slots
 

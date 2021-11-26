@@ -1,4 +1,7 @@
-module.exports = {
+import {path} from '@vuepress/utils'
+import {AppOptions} from "vuepress";
+
+module.exports = <Partial<AppOptions>>{
   locales: {
     '/': {
       lang: 'en-US',
@@ -36,7 +39,8 @@ module.exports = {
           title: 'Thing',
           collapsable: false,
           children: [
-              'demo'
+              'demo',
+              'directive'
           ]
         }
       ]
@@ -50,5 +54,23 @@ module.exports = {
         link: 'https://github.com/siegerts/vue-component-library-template'
       }
     ],
-  }
+  },
+  plugins: [
+    [
+      '@vuepress/register-components',
+      {
+        componentsDir: path.resolve(__dirname, '..'),
+        componentsPatterns: ['**/*.vue', '!.vuepress'],
+        getComponentName(filename: string): string {
+          const prefixes = ['utils']
+          let name = filename
+          for(let prefix of prefixes) {
+            name = name.replace(new RegExp(`^${prefix}/`), '')
+          }
+          name = name.replace(/[\/\\]/g, '-')
+          return path.trimExt(name)
+        }
+      }
+    ]
+  ]
 }

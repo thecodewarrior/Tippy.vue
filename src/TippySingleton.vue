@@ -19,7 +19,7 @@ export default class TippySingleton extends Vue {
   name!: string
 
   @Prop({type: Object, required: false})
-  props!: Partial<CreateSingletonProps>
+  extra!: Partial<CreateSingletonProps>
 
   /**
    * Whether the tooltip should be enabled
@@ -33,7 +33,7 @@ export default class TippySingleton extends Vue {
 
   mounted() {
     this.$el._tippySingleton = this
-    this.singleton = createSingleton(this.instances, this.props)
+    this.singleton = createSingleton(this.instances, this.extra)
     if (!this.enabled) {
       this.singleton.disable();
     }
@@ -41,10 +41,11 @@ export default class TippySingleton extends Vue {
 
   remove(instance: TippyInstance): void {
     let index = this.instances.indexOf(instance)
-    if(index !== -1) {
-      this.instances.splice(index, 1)
-      this.singleton.setInstances(this.instances)
+    if(index === -1) {
+      return
     }
+    this.instances.splice(index, 1)
+    this.singleton.setInstances(this.instances)
   }
 
   add(instance: TippyInstance): void {
@@ -55,9 +56,9 @@ export default class TippySingleton extends Vue {
     this.singleton.setInstances(this.instances)
   }
 
-  @Watch("overrides", {deep: true})
-  private overridesChanged() {
-    this.singleton.setProps(this.props)
+  @Watch("extra", {deep: true})
+  private extraChanged() {
+    this.singleton.setProps(this.extra)
   }
   @Watch('enabled')
   private enabledChanged(val: boolean) {
