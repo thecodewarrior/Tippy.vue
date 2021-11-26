@@ -1,2 +1,35 @@
 @import '~tippy.js/dist/tippy.css';
 @import '~tippy.js/dist/svg-arrow.css';
+
+section {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-auto-flow: column;
+  margin: 10px;
+}
+
+.box {
+  display: inline-block;
+  margin: 5px;
+  width: 20px;
+  height: 20px;
+  background: lightgreen;
+  border: 2px solid black;
+  border-radius: 3px;
+  text-align: center;
+  color: black;
+  font-weight: bold;
+}
+.parent-wrapper {
+  display: flex;
+  margin: 5px;
+  padding: 3px;
+  border-radius: 4px;
+  background: red;
+}
+.parent-wrapper > .icon {
+  flex-grow: 1;
+  width: 16px;
+  height: 16px;
+}

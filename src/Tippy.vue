@@ -89,6 +89,9 @@ import TippySingleton from "@/TippySingleton.vue";
  */
 @Options({
   name: 'tippy',
+  emits: [
+    'init', 'show', 'shown', 'hidden', 'hide', 'mount', 'trigger', 'untrigger'
+  ]
 })
 export default class Tippy extends Vue {
   /**
@@ -184,11 +187,13 @@ export default class Tippy extends Vue {
     this.options = {}
   }
   mounted() {
-    this.attach();
+    this.$nextTick(() => {
+      this.attach();
+    })
   }
 
   @Watch('enabled')
-  enabledChanged(val: boolean) {
+  private enabledChanged(val: boolean) {
     if (!this.tip) return;
     if (val) {
       this.tip.enable();
@@ -199,7 +204,7 @@ export default class Tippy extends Vue {
   }
 
   @Watch('visible')
-  visibleChanged(val: boolean) {
+  private visibleChanged(val: boolean) {
     if (!this.tip) return;
     if (val && this.isManualTrigger) {
       this.tip.show();
@@ -214,7 +219,7 @@ export default class Tippy extends Vue {
     }
   }
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (!this.tip) return;
     this.singletonInstance?.remove(this.tip)
     this.tip.destroy();
@@ -224,57 +229,55 @@ export default class Tippy extends Vue {
     return this.trigger === "manual";
   }
 
-  attach() {
-    this.$nextTick(() => {
-      if (!this.$el.parentElement) {
-        return; // the tippy was created and immediately destroyed.
+  attach(): void {
+    if (!this.$el.parentElement) {
+      return; // the tippy was created and immediately destroyed.
+    }
+    if (this.tip) {
+      try {
+        this.singletonInstance?.remove(this.tip)
+        this.tip.destroy();
+      } catch (error) {
+        console.error(error)
       }
-      if (this.tip) {
-        try {
-          this.singletonInstance?.remove(this.tip)
-          this.tip.destroy();
-        } catch (error) {
-          console.error(error)
-        }
-        this.tip = null;
-      }
+      this.tip = null;
+    }
 
-      let target: Element | null
-      if(this.target === '_parent') {
-        target = this.$el.parentElement
-      } else if (this.deepSearch) {
-        target = this.$el.parentElement.querySelector(`[data-tippy-target="${this.target}"]`);
-      } else {
-        target = Tippy.findSibling(this.$el, 'tippyTarget', this.target)
-      }
-      this.tippyTargetMissing = !target
-      if (!target) {
-        throw new Error(`Unable to find tippy target named ${this.target}`)
-      }
+    let target: Element | null
+    if(this.target === '_parent') {
+      target = this.$el.parentElement
+    } else if (this.deepSearch) {
+      target = this.$el.parentElement.querySelector(`[data-tippy-target="${this.target}"]`);
+    } else {
+      target = Tippy.findSibling(this.$el, 'tippyTarget', this.target)
+    }
+    this.tippyTargetMissing = !target
+    if (!target) {
+      throw new Error(`Unable to find tippy target named ${this.target}`)
+    }
 
-      if (this.singleton != null) {
-        this.singletonInstance = Tippy.findSingleton(this.$el, this.singleton)
-      } else {
-        this.singletonInstance = null
-      }
-      const tip = tippy(target, this.getOptions());
-      if (!tip) {
-        throw new Error(`Unable to create tippy instance`)
-      }
-      this.tip = tip;
-      this.$emit("init", this.tip);
+    if (this.singleton != null) {
+      this.singletonInstance = Tippy.findSingleton(this.$el, this.singleton)
+    } else {
+      this.singletonInstance = null
+    }
+    const tip = tippy(target, this.getOptions());
+    if (!tip) {
+      throw new Error(`Unable to create tippy instance`)
+    }
+    this.tip = tip;
+    this.$emit("init", this.tip);
 
-      if (this.singletonInstance) {
-        this.singletonInstance.add(this.tip)
-      }
+    if (this.singletonInstance) {
+      this.singletonInstance.add(this.tip)
+    }
 
-      if (!this.enabled) {
-        this.tip.disable();
-      }
-      if (this.isManualTrigger && this.visible === true) {
-        this.tip.show();
-      }
-    });
+    if (!this.enabled) {
+      this.tip.disable();
+    }
+    if (this.isManualTrigger && this.visible === true) {
+      this.tip.show();
+    }
   }
 
   static findSibling(element: Element, data: string, target: string): Element | null {
@@ -303,11 +306,11 @@ export default class Tippy extends Vue {
     return singleton?._tippySingleton ?? null;
   }
 
-  tippy() {
+  get tippy(): TippyInstance | null {
     return this.tip;
   }
 
-  getOptions(): Partial<Props> {
+  private getOptions(): Partial<Props> {
     const options: Partial<Props> = {}
     if(this.trigger) {
       options.trigger = this.trigger;

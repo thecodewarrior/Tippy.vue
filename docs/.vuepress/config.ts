@@ -31,18 +31,19 @@ module.exports = {
     },
 
     sidebar: {
-      '/components/': [
+      '/guide': [
         {
-          title: 'Components',
+          title: 'Thing',
           collapsable: false,
-          children: ['standard-component']
+          children: [
+              'demo'
+          ]
         }
       ]
     },
 
     navbar: [
       { text: 'Getting Started', link: '/guide' },
-      { text: 'Components', link: '/components/' },
       // external link to git repo...again
       {
         text: 'GitHub',

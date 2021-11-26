@@ -27,9 +27,9 @@ export default class TippySingleton extends Vue {
   @Prop({required: false, type: Boolean, default: true})
   enabled!: boolean
 
-  instances: TippyInstance[] = []
+  private instances: TippyInstance[] = []
 
-  singleton!: CreateSingletonInstance
+  private singleton!: CreateSingletonInstance
 
   mounted() {
     this.$el._tippySingleton = this
@@ -39,30 +39,28 @@ export default class TippySingleton extends Vue {
     }
   }
 
-  remove(instance: TippyInstance) {
+  remove(instance: TippyInstance): void {
     let index = this.instances.indexOf(instance)
     if(index !== -1) {
       this.instances.splice(index, 1)
+      this.singleton.setInstances(this.instances)
     }
   }
 
-  add(instance: TippyInstance) {
+  add(instance: TippyInstance): void {
     if(this.instances.indexOf(instance) !== -1) {
       return
     }
     this.instances.push(instance)
+    this.singleton.setInstances(this.instances)
   }
 
   @Watch("overrides", {deep: true})
-  overridesChanged() {
+  private overridesChanged() {
     this.singleton.setProps(this.props)
   }
-  @Watch("instances")
-  instancesChanged() {
-    this.singleton.setInstances(this.instances)
-  }
   @Watch('enabled')
-  enabledChanged(val: boolean) {
+  private enabledChanged(val: boolean) {
     if (val) {
       this.singleton.enable();
     } else {
