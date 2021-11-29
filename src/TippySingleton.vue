@@ -1,5 +1,5 @@
 <template>
-  <div class="tippy-singleton" :data-tippy-singleton="name"></div>
+  <div style="display: none;" :data-tippy-singleton="name"></div>
 </template>
 
 <script lang="ts">
@@ -13,7 +13,12 @@ declare global {
   }
 }
 
-@Options({name: "tippy-singleton"})
+@Options({
+  name: "tippy-singleton",
+  emits: [
+    'add', 'remove'
+  ]
+})
 export default class TippySingleton extends Vue {
   @Prop({type: String, required: false, default: ''})
   name!: string
@@ -39,12 +44,17 @@ export default class TippySingleton extends Vue {
     }
   }
 
+  unmounted() {
+    this.singleton.destroy()
+  }
+
   remove(instance: TippyInstance): void {
     let index = this.instances.indexOf(instance)
     if(index === -1) {
       return
     }
     this.instances.splice(index, 1)
+    this.$emit('remove', instance)
     this.singleton.setInstances(this.instances)
   }
 
@@ -53,6 +63,7 @@ export default class TippySingleton extends Vue {
       return
     }
     this.instances.push(instance)
+    this.$emit('add', instance)
     this.singleton.setInstances(this.instances)
   }
 
@@ -71,9 +82,3 @@ export default class TippySingleton extends Vue {
   }
 }
 </script>
-
-<style scoped>
-.tippy-singleton {
-  display: none;
-}
-</style>

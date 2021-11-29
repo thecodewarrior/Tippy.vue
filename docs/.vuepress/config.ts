@@ -1,28 +1,25 @@
 import {path} from '@vuepress/utils'
-import {AppOptions} from "vuepress";
+import {AppOptions, DefaultThemeOptions} from "vuepress";
 
 module.exports = <Partial<AppOptions>>{
   locales: {
     '/': {
       lang: 'en-US',
-      title: 'Component Library 🥂',
-      description: 'Documentation site for the Vue component library plugin'
+      title: 'Tippy.vue',
+      description: 'Documentation for the Tippy.vue library plugin'
     }
   },
-  themeConfig: {
+  themeConfig: <Partial<DefaultThemeOptions>>{
     repoLabel: 'Contribute!',
     // git repo here... gitlab, github
     repo: 'https://github.com/siegerts/vue-component-library-template',
     docsDir: 'docs',
-    editLinks: true,
     docsBranch: 'master',
-    editLinkText: 'Help us improve this page!',
     search: false,
     locales: {
       '/': {
         label: 'English',
         selectText: 'Languages',
-        lastUpdated: 'Last Updated',
         // service worker is configured but will only register in production
         serviceWorker: {
           updatePopup: {
@@ -34,26 +31,31 @@ module.exports = <Partial<AppOptions>>{
     },
 
     sidebar: {
-      '/guide': [
+      '/guide/': [
         {
-          title: 'Thing',
-          collapsable: false,
+          text: 'Guide',
           children: [
-              'demo',
-              'directive'
+              '/guide/v-tippy.md',
+              '/guide/tippy.md',
+              '/guide/singletons.md',
           ]
         }
       ]
     },
 
     navbar: [
-      { text: 'Getting Started', link: '/guide' },
+      { text: 'Getting Started', link: '/guide/' },
       // external link to git repo...again
       {
         text: 'GitHub',
         link: 'https://github.com/siegerts/vue-component-library-template'
       }
     ],
+  },
+  markdown: {
+    code: {
+      lineNumbers: false
+    }
   },
   plugins: [
     [
@@ -71,6 +73,7 @@ module.exports = <Partial<AppOptions>>{
           return path.trimExt(name)
         }
       }
-    ]
+    ],
+    'vuepress-plugin-attrs'
   ]
 }

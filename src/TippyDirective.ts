@@ -1,37 +1,45 @@
-import tippy, {Instance as TippyInstance} from "tippy.js";
-import {createOptions} from "./TippyOptions";
+import tippy, {Instance as TippyInstance, Props} from "tippy.js";
 import {Directive, DirectiveBinding, VNode} from "vue";
+
+const _mode = Symbol("v-tippy mode")
+type VTippyMode = 'inline' | 'target'
+const _tippy = Symbol("v-tippy instance")
 
 declare global {
   interface HTMLElement {
-    _tippy?: TippyInstance
+    [_mode]?: VTippyMode
+    [_tippy]?: TippyInstance
   }
 }
 
-const TippyDirective: Directive = {
-  mounted(el: any, binding: DirectiveBinding, vnode: VNode): void {
+function createOptions(value: any): Partial<Props> {
+  if(typeof value === 'string') {
+    return {content: value}
+  } else {
+    return value
+  }
+}
+
+const TippyDirective: Directive<HTMLElement> = {
+  mounted(el: HTMLElement, binding: DirectiveBinding): void {
     if (binding.value === undefined) {
+      el[_mode] = 'target'
       el.dataset.tippyTarget = binding.arg ?? ""
     } else {
-      tippy(el, createOptions(binding.value, vnode))
+      el[_mode] = 'inline'
+      el[_tippy] = tippy(el, createOptions(binding.value))
     }
   },
-  beforeUnmount(el: any): void {
-    if (el.dataset.tippyTarget !== undefined) {
+  beforeUnmount(el: HTMLElement): void {
+    if (el[_mode] === 'inline') {
+      el[_tippy]?.destroy()
+    } else {
       delete el.dataset.tippyTarget;
-    } else if (el._tippy) {
-      el._tippy.destroy()
     }
   },
-  updated(el: any, binding: DirectiveBinding, vnode: VNode): void {
-    if (el.dataset.tippyTarget !== undefined) {
-      el.dataset.tippyTarget = binding.arg ?? ""
-    } else {
-      if(el._tippy) {
-        el._tippy.setProps(createOptions(binding.value, vnode))
-      } else {
-        tippy(el, createOptions(binding.value, vnode))
-      }
+  updated(el: HTMLElement, binding: DirectiveBinding): void {
+    if (el[_mode] === 'inline') {
+      el[_tippy]?.setProps(createOptions(binding.value))
     }
   }
 }

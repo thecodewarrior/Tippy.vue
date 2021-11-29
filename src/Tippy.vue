@@ -90,7 +90,7 @@ import TippySingleton from "@/TippySingleton.vue";
 @Options({
   name: 'tippy',
   emits: [
-    'init', 'show', 'shown', 'hidden', 'hide', 'mount', 'trigger', 'untrigger'
+    'attach', 'show', 'shown', 'hidden', 'hide', 'mount', 'trigger', 'untrigger'
   ]
 })
 export default class Tippy extends Vue {
@@ -266,11 +266,11 @@ export default class Tippy extends Vue {
       throw new Error(`Unable to create tippy instance`)
     }
     this.tip = tip;
-    this.$emit("init", this.tip);
 
     if (this.singletonInstance) {
       this.singletonInstance.add(this.tip)
     }
+    this.$emit("attach", this.tip);
 
     if (!this.enabled) {
       this.tip.disable();

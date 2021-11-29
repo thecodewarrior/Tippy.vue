@@ -1,0 +1,35 @@
+<template>
+  <a v-if="props.link" :href="props.link" :class="classes">{{content}}</a>
+  <span v-else :class="classes">{{content}}</span>
+</template>
+
+<script setup lang="ts">
+import {defineProps, computed} from 'vue';
+const props = defineProps({
+  op: String,
+  builtin: String,
+  type: String,
+  string: String,
+  link: String
+})
+
+let content = computed<string>(() => {
+  return props.op ?? props.builtin ?? props.type ?? props.string
+})
+let classes = computed<string[]>(() => {
+  let tokenClass = props.op ? 'operator' :
+      props.builtin ? 'builtin' :
+          props.type ? 'builtin' :
+              props.string ? 'string' :
+                  ''
+
+  return ['token', tokenClass]
+})
+
+</script>
+
+<style scoped>
+a {
+  text-decoration: underline;
+}
+</style>

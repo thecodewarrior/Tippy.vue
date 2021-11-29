@@ -1,8 +1,22 @@
 <template>
   <div class="demo">
-    <slot></slot>
+    <slot :seconds="seconds"></slot>
   </div>
 </template>
+
+<script setup>
+import {ref, onMounted, onUnmounted} from 'vue';
+
+const seconds = ref(0);
+
+let intervalHandle = -1;
+onMounted(() => {
+  intervalHandle = setInterval(() => seconds.value++, 1000)
+});
+onUnmounted(() => {
+  clearInterval(intervalHandle)
+});
+</script>
 
 <style scoped>
 .demo {
@@ -21,12 +35,13 @@
 .demo:deep(.wrapper) {
   display: flex;
   margin: 5px;
-  padding: 1px;
+  padding: 3px;
   border-radius: 4px;
   border: 2px solid var(--c-brand);
+  background-color: white;
 }
 .demo:deep(.wrapper > button), .demo:deep(.wrapper > span) {
-  box-shadow: 2px 2px 2px var(--c-text);
+  box-shadow: 2px 2px 0 black;
 }
 .demo:deep(button) {
   display: inline-block;
