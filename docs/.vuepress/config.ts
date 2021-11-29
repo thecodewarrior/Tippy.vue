@@ -18,15 +18,7 @@ module.exports = <Partial<AppOptions>>{
     search: false,
     locales: {
       '/': {
-        label: 'English',
-        selectText: 'Languages',
-        // service worker is configured but will only register in production
-        serviceWorker: {
-          updatePopup: {
-            message: 'New content is available.',
-            buttonText: 'Refresh'
-          }
-        },
+        repoLabel: 'GitHub'
       }
     },
 
@@ -45,11 +37,6 @@ module.exports = <Partial<AppOptions>>{
 
     navbar: [
       { text: 'Getting Started', link: '/guide/' },
-      // external link to git repo...again
-      {
-        text: 'GitHub',
-        link: 'https://github.com/siegerts/vue-component-library-template'
-      }
     ],
   },
   markdown: {

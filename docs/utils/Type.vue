@@ -7,6 +7,7 @@
 import {defineProps, computed} from 'vue';
 const props = defineProps({
   op: String,
+  punc: String,
   builtin: String,
   type: String,
   string: String,
@@ -14,14 +15,16 @@ const props = defineProps({
 })
 
 let content = computed<string>(() => {
-  return props.op ?? props.builtin ?? props.type ?? props.string
+  return props.op ?? props.punc ?? props.builtin ?? props.type ?? props.string
 })
 let classes = computed<string[]>(() => {
-  let tokenClass = props.op ? 'operator' :
-      props.builtin ? 'builtin' :
-          props.type ? 'builtin' :
-              props.string ? 'string' :
-                  ''
+  let tokenClass =
+      props.op ? 'operator' :
+          props.punc ? 'punctuation' :
+              props.builtin ? 'builtin' :
+                  props.type ? 'builtin' :
+                      props.string ? 'string' :
+                          ''
 
   return ['token', tokenClass]
 })

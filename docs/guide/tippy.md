@@ -23,7 +23,7 @@ element.
 <tippy target="html">Bold time: <b>{{seconds}}</b></tippy>
 ```
 
-## Props
+## Unique Props
 
 Note that a bare attribute is identical to `''`. This is used for several flag-like properties. 
 (e.g. `<tippy interactive></tippy>`)
@@ -37,6 +37,15 @@ element. Details on how exactly this works are in the [target binding](#target-b
 
 When specified, the component will perform the target search using `querySelector` on its parent, as opposed to only
 searching its siblings. 
+
+### <code>singleton<type op=":"/> <type builtin="string"/> <type op="|"/> <type string="''"/></code> {#singleton}
+
+The name of a `<tippy-singleton>` to bind to. Details on how that works are in the
+[singleton binding](#singleton-binding) section.
+
+## Tippy props
+
+These options are all to configure the tippy object
 
 ### <code>extra<type op=":"/> <type type="Props" link="https://atomiks.github.io/tippyjs/v6/all-props/"/></code> {#extra}
 
@@ -65,20 +74,15 @@ to isolate the styles (a rogue selector may be trying to style the tooltip conte
 
 The [Tippy.js trigger](https://atomiks.github.io/tippyjs/v6/all-props/#trigger).
 
-### <code>visible<type op=":"/> <type builtin="boolean"/></code> {#visible}
-
-Controls the visibility of the tooltip when the trigger is set to `'manual'`. To manually show/hide the tooltip when 
-using another trigger, use `component.tippy().show()` and `component.tippy().hide()`
-
 ### <code>hide-on-click<type op=":"/> <type builtin="boolean"/> <type op="|"/> <type builtin="null"/></code> {#hide-on-click}
 
 Whether to hide the tooltip when clicking outside it. Unless overridden by being set to a non-null value, this defaults 
-to false when the using the `'manual'` [`trigger`](#trigger) and true otherwise. 
+to false when the using the `'manual'` [`trigger`](#trigger) and true otherwise.
 
-### <code>singleton<type op=":"/> <type builtin="string"/> <type op="|"/> <type string="''"/></code> {#singleton}
+### <code>visible<type op=":"/> <type builtin="boolean"/></code> {#visible}
 
-The name of a `<tippy-singleton>` to bind to. Details on how that works are in the 
-[singleton binding](#singleton-binding) section.
+Controls the visibility of the tooltip when the trigger is set to `'manual'`. To manually show/hide the tooltip when
+using another trigger, use `component.tippy().show()` and `component.tippy().hide()`
 
 ## Events
 

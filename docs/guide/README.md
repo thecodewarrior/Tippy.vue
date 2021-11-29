@@ -73,7 +73,10 @@ tooltipped elements.
 
 ### `deep-search`
 
-Deep searching using `deep-search`
+If you need to search in more than just the siblings, you can use `deep-search`, which instead uses `querySelector` on
+the parent element. You can bind to deeply nested elements at the cost of not being able to chain them (since 
+`querySelector` always returns the first element, all your tooltips will bind to the first item) 
+
 <demo>
   <tippy target="box" deep-search>Attachment</tippy>
   <span class="wrapper">

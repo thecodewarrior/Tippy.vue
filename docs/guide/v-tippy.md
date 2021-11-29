@@ -28,7 +28,7 @@ When started up in target mode, the directive marks itself as a target for the [
 that `<tippy>` components won't automatically respond when the marker is updated, so in most cases a dynamic argument
 won't work. Internally, the element is marked with `data-tippy-target="arg"`.
 
-The details of how `<tippy>` binds to this marker are covered in the [`<tippy>` docs](tippy.md#binding).
+The details of how `<tippy>` binds to this marker are covered in the [`<tippy>` docs](tippy.md#target-binding).
 
 <demo>
 <button v-tippy>Default marker</button> <!-- Defaults to "" -->
