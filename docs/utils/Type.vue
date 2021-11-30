@@ -33,6 +33,6 @@ let classes = computed<string[]>(() => {
 
 <style scoped>
 a {
-  text-decoration: underline;
+  font-style: italic;
 }
 </style>

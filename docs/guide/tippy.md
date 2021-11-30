@@ -43,9 +43,9 @@ searching its siblings.
 The name of a `<tippy-singleton>` to bind to. Details on how that works are in the
 [singleton binding](#singleton-binding) section.
 
-## Tippy props
+## Common props
 
-These options are all to configure the tippy object
+These options are common to both `<tippy>` and `<tippy-singleton>`
 
 ### <code>extra<type op=":"/> <type type="Props" link="https://atomiks.github.io/tippyjs/v6/all-props/"/></code> {#extra}
 
@@ -86,9 +86,14 @@ using another trigger, use `component.tippy().show()` and `component.tippy().hid
 
 ## Events
 
-In addition to the `attach` event, which triggers after the tippy instance has been created and has attached to the
-target element, the `<tippy>` component exposes several of the 
-[Tippy.js events](https://atomiks.github.io/tippyjs/v6/all-props/#onhidden) as Vue events
+### <code>attach<type punc="("/><type link="https://atomiks.github.io/tippyjs/v6/tippy-instance/" type="tip"/><type punc=")"/></code> {#attach}
+
+`<tippy>` fires the `attach` after the tippy instance is been created and has been attached to the target element.
+
+### Common events
+
+The `<tippy>` component exposes several of the 
+[Tippy.js events](https://atomiks.github.io/tippyjs/v6/all-props/#onhidden) as Vue events:
 
 | Tippy.js event | Vue event | Vue event parameters |
 |----------------|-----------|----------------------|
