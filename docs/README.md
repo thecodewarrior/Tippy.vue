@@ -15,12 +15,17 @@ actions:
     type: primary
 ---
 
+
 <demo v-slot="{seconds}">
-  <button class="big-button" v-tippy>Tippy.vue</button>
-  <tippy>Current time: <i>{{seconds}}</i></tippy>
+  <button class="big-button" v-tippy>&lt;tippy&gt;</button>
+  <tippy @show="source = 'component'">Current time: <i>{{seconds}}</i></tippy>
+  <button class="big-button" v-tippy="{content: 'Current time: ' + seconds, onShow: () => source = 'directive'}">v-tippy</button>
 </demo>
 
-<div class="narrow-text">
+[comment]: <> (<div :style="{visibility: source === 'component' ? 'visible' : 'hidden'}">)
+
+<div class="hero-source">
+<div :class="{'source-hidden': source !== 'component'}">
 
 ```vue
 <button v-tippy>Tippy.vue</button>
@@ -28,17 +33,45 @@ actions:
 ```
 
 </div>
+<div class="directive-source" :class="{'source-hidden': source !== 'directive'}" :style="{opacity: source === 'directive' ? '1.0' : '0.0'}">
+
+```vue
+<button v-tippy="'Current time: ' + seconds">v-tippy</button>
+
+```
+
+</div>
+</div>
+
+<script setup>
+import {ref} from 'vue';
+
+let source = ref("component")
+</script>
 
 <style scoped>
 .big-button {
   font-size: 1.5em;
 }
-.narrow-text {
-  display: flex;
+
+.hero-source {
+  display: grid;
   justify-content: center;
   margin: .85rem 0;
 }
-.narrow-text pre {
+.hero-source > * {
+  grid-area: 1 / 1;
+
+  transition: opacity 0.15s;
+}
+.hero-source pre {
   margin: 0;
+}
+.directive-source {
+  z-index: 1;
+}
+.source-hidden {
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
 }
 </style>
