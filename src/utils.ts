@@ -54,7 +54,3 @@ export function findSibling(element: Element, test: (element: Element) => boolea
   }
   return null;
 }
-
-function matchesTarget(element: any, dataName: string, dataValue: string): boolean {
-  return element.dataset && element.dataset[dataName] === dataValue
-}

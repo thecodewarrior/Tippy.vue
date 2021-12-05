@@ -30,10 +30,12 @@ export default defineComponent({
     ...commonVisibleProp,
     ...commonProps
   },
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   emits: {
     attach: (instance: TippyInstance) => true,
     ...commonEmits
   },
+  /* eslint-enable @typescript-eslint/no-unused-vars */
   render() {
     return h('div', {
       'tippy-missing-target': this.tippyTargetMissing ? '' : undefined,
@@ -57,13 +59,10 @@ export default defineComponent({
     attach() {
       // destroy old tip
       if (this.tip) {
-        try {
-          this.singletonInstance?.remove(this.tip)
-          this.tip.destroy();
-        } catch (error) {
-          console.error(error)
-        }
-        this.tip = undefined;
+        const tip = this.tip
+        this.tip = undefined
+        this.singletonInstance?.remove(tip)
+        tip.destroy();
       }
 
       // find the target

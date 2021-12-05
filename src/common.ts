@@ -3,6 +3,7 @@ import {computed, ExtractPropTypes, PropType, Ref, toRefs, watch} from "vue";
 import {SetupContext} from "@vue/runtime-core";
 import {injectCallback} from "./utils";
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export const commonEmits = {
   mount: (instance: TippyInstance) => true,
   show: (instance: TippyInstance) => true,
@@ -12,6 +13,7 @@ export const commonEmits = {
   trigger: (instance: TippyInstance, event: Event) => true,
   untrigger: (instance: TippyInstance, event: Event) => true,
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export const commonProps = {
   /**

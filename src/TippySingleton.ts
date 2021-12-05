@@ -1,4 +1,4 @@
-import {defineComponent, h, PropType, ref, toRefs} from "vue";
+import {defineComponent, h, PropType, ref} from "vue";
 import {commonEmits, commonProps, commonSetup} from "./common";
 import {
   createSingleton,
@@ -45,11 +45,13 @@ export default defineComponent({
     },
     ...commonProps
   },
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   emits: {
     add: (instance: TippyInstance) => true,
     remove: (instance: TippyInstance) => true,
     ...commonEmits
   },
+  /* eslint-enable @typescript-eslint/no-unused-vars */
   render() {
     return h('div', {
       'style': 'display: none;',

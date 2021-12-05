@@ -1,5 +1,5 @@
 import tippy, {Instance as TippyInstance, Props} from "tippy.js";
-import {Directive, DirectiveBinding, VNode} from "vue";
+import {Directive, DirectiveBinding} from "vue";
 
 const _mode = Symbol("v-tippy mode")
 type VTippyMode = 'inline' | 'target'
