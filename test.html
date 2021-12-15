@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <title>Tippy.vue publishing test</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+  <script src="./dist/index.umd.js"></script>
+</head>
+<body>
+<h1>Hi</h1>
+<div id="counter">
+  <button @click="click" v-tippy>Wow {{counter}}</button>
+  <tippy>Nice, value is {{counter}}</tippy>
+</div>
+<script type="module">
+  const Counter = {
+    data() {
+      return {
+        counter: 0
+      }
+    },
+    methods: {
+      click() {
+        this.counter++
+      }
+    }
+  }
+
+  Vue.createApp(Counter)
+      .use(TippyVue.TippyPlugin)
+      .mount('#counter')
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@ import {
   createSingleton,
   CreateSingletonInstance,
   CreateSingletonProps,
-  Instance as TippyInstance,
+  Instance as TippyInstance, Placement,
   Props
 } from "tippy.js";
 
@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-export default defineComponent({
+const TippySingleton = defineComponent({
   props: {
     /**
      * The singleton name. Defaults to `""` (the default name used by `<tippy singleton>`)
@@ -43,6 +43,7 @@ export default defineComponent({
       type: String,
       required: false,
     },
+
     ...commonProps
   },
   /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -106,3 +107,5 @@ export default defineComponent({
     }
   }
 })
+
+export default TippySingleton

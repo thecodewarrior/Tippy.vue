@@ -4,7 +4,7 @@ import TippyDirective from "./TippyDirective";
 import TippySingleton from "./TippySingleton";
 import tippy, {DefaultProps} from "tippy.js";
 
-const TippyVue: Plugin = {
+export const TippyPlugin: Plugin = {
   install(app, defaultProps?: Partial<DefaultProps>) {
     if(defaultProps) {
       tippy.setDefaultProps(defaultProps)
@@ -18,4 +18,3 @@ const TippyVue: Plugin = {
 export {default as TippyDirective} from "./TippyDirective"
 export {default as TippySingleton} from "./TippySingleton"
 export {default as Tippy} from "./Tippy"
-export default TippyVue

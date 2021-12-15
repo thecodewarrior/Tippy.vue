@@ -3,7 +3,6 @@
     "target": "esnext",
     "module": "esnext",
     "strict": true,
-    "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
@@ -12,17 +11,8 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      "mocha",
-      "chai",
-      "vue"
-    ],
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
+    "outDir": "dist",
+    "types": [],
     "lib": [
       "esnext",
       "dom",
@@ -31,13 +21,9 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules", "rollup.config.js"
   ]
 }

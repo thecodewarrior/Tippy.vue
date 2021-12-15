@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-function createOptions(value: any): Partial<Props> {
+function createOptions(value: string | Partial<Props>): Partial<Props> {
   if(typeof value === 'string') {
     return {content: value}
   } else {
@@ -20,8 +20,8 @@ function createOptions(value: any): Partial<Props> {
   }
 }
 
-const TippyDirective: Directive<HTMLElement> = {
-  mounted(el: HTMLElement, binding: DirectiveBinding): void {
+const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
+  mounted(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props>>): void {
     if (binding.value === undefined) {
       el[_mode] = 'target'
       el.dataset.tippyTarget = binding.arg ?? ""
@@ -37,7 +37,7 @@ const TippyDirective: Directive<HTMLElement> = {
       delete el.dataset.tippyTarget;
     }
   },
-  updated(el: HTMLElement, binding: DirectiveBinding): void {
+  updated(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props>>): void {
     if (el[_mode] === 'inline') {
       el[_tippy]?.setProps(createOptions(binding.value))
     }

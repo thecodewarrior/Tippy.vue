@@ -1,7 +1,6 @@
 import {Instance as TippyInstance, Placement, Props} from "tippy.js";
 import {computed, ExtractPropTypes, PropType, Ref, toRefs, watch} from "vue";
 import {SetupContext} from "@vue/runtime-core";
-import {injectCallback} from "./utils";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const commonEmits = {
@@ -91,17 +90,6 @@ export const commonProps = {
   },
 }
 
-export const commonVisibleProp = {
-  /**
-   * Only used when using the manual trigger. To show/hide when using another trigger, use `tippy().show()` and
-   * `tippy().hide()`
-   */
-  visible: {
-    type: Boolean,
-    required: false,
-  },
-}
-
 export function commonSetup<E extends typeof commonEmits>(
     props: ExtractPropTypes<typeof commonProps>,
     baseContext: SetupContext<E>,
@@ -174,5 +162,17 @@ export function commonSetup<E extends typeof commonEmits>(
 
   return {
     tippyOptions
+  }
+}
+
+function injectCallback<Args extends any[], Return>(
+    existing: ((...args: Args) => Return) | undefined,
+    callback: (...args: Args) => Return,
+): (...args: Args) => Return {
+  return (...args: Args) => {
+    let result = callback(...args)
+    if (existing)
+      result = existing(...args)
+    return result
   }
 }

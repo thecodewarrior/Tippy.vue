@@ -2,6 +2,7 @@ import {path} from '@vuepress/utils'
 import {AppOptions, DefaultThemeOptions} from "vuepress";
 
 module.exports = <Partial<AppOptions>>{
+  base: '/Tippy.vue/',
   locales: {
     '/': {
       lang: 'en-US',

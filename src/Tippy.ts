@@ -1,10 +1,9 @@
 import {defineComponent, h, nextTick, PropType, ref} from "vue";
-import {commonEmits, commonProps, commonSetup, commonVisibleProp} from "./common";
-import tippy, {Instance as TippyInstance} from "tippy.js";
-import {findElement} from "./utils";
+import {commonEmits, commonProps, commonSetup} from "./common";
+import tippy, {Instance as TippyInstance, Placement, Props} from "tippy.js";
 import {VueSingleton} from "./TippySingleton";
 
-export default defineComponent({
+const Tippy = defineComponent({
   props: {
     /**
      * The v-tippy target name. Defaults to `""` (the default name used by `v-tippy`)
@@ -22,12 +21,21 @@ export default defineComponent({
       required: false,
       default: false
     },
+
     singleton: {
       type: String as PropType<string | '' | null>,
       required: false,
       default: null,
     },
-    ...commonVisibleProp,
+
+    /**
+     * Only used when using the manual trigger. To show/hide when using another trigger, use `tippy().show()` and
+     * `tippy().hide()`
+     */
+    visible: {
+      type: Boolean,
+      required: false,
+    },
     ...commonProps
   },
   /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -124,3 +132,50 @@ export default defineComponent({
     this.tip?.destroy()
   },
 })
+
+type StandardSearch = {
+  /**
+   * Tests if an element matches
+   */
+  test(element: Element): boolean,
+  /**
+   * Whether to recurse up through the element's parents.
+   */
+  recurse?: boolean,
+  /**
+   * Whether to test the starting element. When recursing this also controls whether to test the element's direct
+   * parents.
+   */
+  selftest?: boolean
+}
+
+/**
+ * @param start the element to start at. will not test the starting element or any of its parents
+ * @param search the search parameters to use
+ */
+function findElement(start: any, search: StandardSearch): Element | null {
+  let found: Element | null = null
+  let current = start
+  do {
+    found = findSibling(current, search.test, search.selftest ?? false)
+    current = current.parentElement
+  } while(search.recurse && current && !found)
+  return found
+}
+
+function findSibling(element: Element, test: (element: Element) => boolean, testSelf: boolean): Element | null {
+  if(testSelf && test(element)) {
+    return element
+  }
+  for(let sibling = element.previousElementSibling; sibling; sibling = sibling.previousElementSibling) {
+    if (test(sibling))
+      return sibling;
+  }
+  for(let sibling = element.nextElementSibling; sibling; sibling = sibling.nextElementSibling) {
+    if (test(sibling))
+      return sibling;
+  }
+  return null;
+}
+
+export default Tippy;
