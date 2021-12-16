@@ -24,20 +24,22 @@ module.exports = <Partial<AppOptions>>{
     },
 
     sidebar: {
-      '/guide/': [
-        {
-          text: 'Guide',
-          children: [
-              '/guide/v-tippy.md',
-              '/guide/tippy.md',
-              '/guide/singletons.md',
-          ]
-        }
+      '/reference/': [
+        '/reference/v-tippy.md',
+        '/reference/tippy.md',
+        '/reference/tippy-singleton.md'
       ]
     },
 
     navbar: [
-      { text: 'Getting Started', link: '/guide/' },
+      { text: 'Getting Started', link: '/getting-started.md' },
+      {
+        text: 'Reference', children: [
+          {text: 'v-tippy', link: '/reference/v-tippy.md'},
+          {text: '<tippy>', link: '/reference/tippy.md'},
+          {text: '<tippy-singleton>', link: '/reference/tippy-singleton.md'}
+        ]
+      },
     ],
   },
   markdown: {

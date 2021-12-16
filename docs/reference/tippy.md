@@ -31,7 +31,7 @@ Note that a bare attribute is identical to `''`. This is used for several flag-l
 ### <code>target<type op=":"/> <type builtin="string"/> <type op="|"/> <type string="'_parent'"/></code> {#target}
 
 Sets the `v-tippy` target name this component will bind to. When set to `_parent`, it will bind to its direct parent 
-element. Details on how exactly this works are in the [target binding](#target-binding) section.
+element. Details on how exactly this binding process works are in the [target binding](#target-binding) section.
 
 ### <code>deep-search<type op=":"/> <type builtin="boolean"/> <type op="|"/> <type string="''"/></code> {#deep-search}
 
@@ -40,8 +40,13 @@ searching its siblings.
 
 ### <code>singleton<type op=":"/> <type builtin="string"/> <type op="|"/> <type string="''"/></code> {#singleton}
 
-The name of a `<tippy-singleton>` to bind to. Details on how that works are in the
+The name of a `<tippy-singleton>` to bind to. Details on how singleton binding works are in the
 [singleton binding](#singleton-binding) section.
+
+### <code>visible<type op=":"/> <type builtin="boolean"/></code> {#visible}
+
+Controls the visibility of the tooltip when the [`trigger`](#trigger) is set to `'manual'`. To manually show/hide the 
+tooltip when using another trigger, use `component.tip.show()` and `component.tip.hide()`
 
 ## Common props
 
@@ -76,19 +81,14 @@ The [Tippy.js trigger](https://atomiks.github.io/tippyjs/v6/all-props/#trigger).
 
 ### <code>hide-on-click<type op=":"/> <type builtin="boolean"/> <type op="|"/> <type builtin="null"/></code> {#hide-on-click}
 
-Whether to hide the tooltip when clicking outside it. Unless overridden by being set to a non-null value, this defaults 
-to false when the using the `'manual'` [`trigger`](#trigger) and true otherwise.
-
-### <code>visible<type op=":"/> <type builtin="boolean"/></code> {#visible}
-
-Controls the visibility of the tooltip when the trigger is set to `'manual'`. To manually show/hide the tooltip when
-using another trigger, use `component.tippy().show()` and `component.tippy().hide()`
+Whether to hide the tooltip when clicking outside it. This defaults to false when the using the `'manual'` 
+[`trigger`](#trigger) and true otherwise. (setting the prop to a non-null value overrides this default)
 
 ## Events
 
 ### <code>attach<type punc="("/><type link="https://atomiks.github.io/tippyjs/v6/tippy-instance/" type="tip"/><type punc=")"/></code> {#attach}
 
-`<tippy>` fires the `attach` after the tippy instance is been created and has been attached to the target element.
+`<tippy>` fires the `attach` event after the tippy instance is been created and has been attached to the target element.
 
 ### Common events
 

@@ -11,7 +11,7 @@ features:
     details: Tippy.vue mounts itself and then disappears from the DOM tree, leaving your layout untouched. 
 actions:
   - text: Get Started →
-    link: /guide/
+    link: /getting-started.md
     type: primary
 ---
 

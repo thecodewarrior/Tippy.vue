@@ -3,18 +3,18 @@
 ## `v-tippy`
 
 The most basic tooltips can be created purely using the `v-tippy` directive. The value of the directive either a string 
-or a [tippy props object](https://atomiks.github.io/tippyjs/v6/all-props/). The v-tippy directive is also used with an
-argument and no value (`<... v-tippy:arg>`) to mark targets for the `<tippy>` component.
+or a [tippy props object](https://atomiks.github.io/tippyjs/v6/all-props/). The v-tippy directive is also used without
+a value (`<... v-tippy>`) to mark targets for the `<tippy>` component.
 
 <demo v-slot="{seconds}">
   <button v-tippy="'Some content'">Static</button>
-  <button v-tippy="{content: `Seconds: ${seconds}`}">Counter</button>
+  <button v-tippy="`Seconds: ${seconds}`">Counter</button>
   <button v-tippy="{content: 'Some content', trigger:'click', interactive:true}">Click me</button>
 </demo>
 
 ```vue
 <button v-tippy="'Some content'">Static</button>
-<button v-tippy="{content: `Seconds: ${seconds}`}">Counter</button>
+<button v-tippy="`Seconds: ${seconds}`">Counter</button>
 <button v-tippy="{content: 'Some content', trigger:'click', interactive:true}">Click me</button>
 ```
 
@@ -169,6 +169,7 @@ identical, but it progressively searches through its parent elements.
 <tippy singleton>Item 1</tippy>
 <button v-tippy>2</button>
 <tippy singleton>Item 2</tippy>
+
 <tippy-singleton :extra="{delay: 500}"/>
 <button v-tippy>A</button>
 <tippy singleton>Item A</tippy>
@@ -199,19 +200,6 @@ Singletons can be given names and referenced by them for more control.
   </tippy>
 </template>
 ```
-
-Interactive tooltips sometimes require `on-body` to get around z-index, clipping, or styling issues (when the element is
-interactive and doesn't have `on-body`, it'll be placed next to its target, which means it'll inherit the styles of that
-element. Note the style of the
-`on-body` element in the interactive tooltips)
-<demo>
-<button v-tippy>non-interactive</button>
-<tippy>I'm not interactive</tippy>
-<button v-tippy>interactive</button>
-<tippy interactive>I'm interactive,<br/>but not <code>on-body</code></tippy>
-<button v-tippy>on-body</button>
-<tippy interactive on-body>I'm interactive,<br/>and <code>on-body</code></tippy>
-</demo>
 
 <script setup>
 import {ref} from 'vue';

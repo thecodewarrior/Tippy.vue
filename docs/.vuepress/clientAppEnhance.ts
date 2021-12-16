@@ -1,6 +1,6 @@
 import { defineClientAppEnhance } from '@vuepress/client'
-import TippyVue from '../../src'
+import {TippyPlugin} from '../../src'
 
 export default defineClientAppEnhance(({ app, router, siteData }) => {
-  app.use(TippyVue)
+  app.use(TippyPlugin)
 })
