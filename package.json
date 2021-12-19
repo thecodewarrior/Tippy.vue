@@ -2,7 +2,6 @@
   "name": "tippy.vue",
   "version": "3.0.0",
   "license": "BSD-2-Clause",
-
   "description": "Nesting-free Vue components for Tippy.js - a drop-in addition with no structural or css changes required",
   "keywords": [
     "tooltip",
@@ -21,7 +20,6 @@
     "type": "git",
     "url": "https://github.com/thecodewarrior/Tippy.vue.git"
   },
-
   "files": [
     "dist/",
     "LICENSE",
@@ -58,6 +56,7 @@
     "@vuepress/plugin-register-components": "^2.0.0-beta.27",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
+    "patch-vue-directive-ssr": "^0.0.1",
     "rollup": "^2.60.2",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1",
