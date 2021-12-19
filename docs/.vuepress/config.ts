@@ -15,7 +15,7 @@ module.exports = <Partial<AppOptions>>{
     repoLabel: 'Contribute!',
     repo: 'https://github.com/thecodewarrior/Tippy.vue',
     docsDir: 'docs',
-    docsBranch: 'master',
+    docsBranch: 'vue-3',
     search: false,
     locales: {
       '/': {
