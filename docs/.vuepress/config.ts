@@ -1,5 +1,6 @@
 import {path} from '@vuepress/utils'
 import {AppOptions, DefaultThemeOptions} from "vuepress";
+var x = require("../../package.json")
 
 module.exports = <Partial<AppOptions>>{
   base: '/Tippy.vue/',
@@ -12,8 +13,7 @@ module.exports = <Partial<AppOptions>>{
   },
   themeConfig: <Partial<DefaultThemeOptions>>{
     repoLabel: 'Contribute!',
-    // git repo here... gitlab, github
-    repo: 'https://github.com/siegerts/vue-component-library-template',
+    repo: 'https://github.com/thecodewarrior/Tippy.vue',
     docsDir: 'docs',
     docsBranch: 'master',
     search: false,
@@ -65,5 +65,5 @@ module.exports = <Partial<AppOptions>>{
       }
     ],
     'vuepress-plugin-attrs'
-  ]
+  ],
 }

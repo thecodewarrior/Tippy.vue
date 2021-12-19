@@ -21,7 +21,25 @@ export default [
     plugins: [
       typescript(),
       resolve(),
-      // terser()
+    ]
+  },
+  {
+    input: 'src/index.ts',
+    external: ['vue', 'tippy.js'],
+    output: {
+      name: 'TippyVue',
+      file: pkg.browserMin,
+      format: 'umd',
+      sourcemap: true,
+      globals: {
+        'vue': 'Vue',
+        'tippy.js': 'tippy'
+      }
+    },
+    plugins: [
+      typescript(),
+      resolve(),
+      terser(),
     ]
   },
   {

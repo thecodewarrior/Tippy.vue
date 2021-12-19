@@ -23,7 +23,7 @@ element.
 <tippy target="html">Bold time: <b>{{seconds}}</b></tippy>
 ```
 
-## Unique Props
+## Props
 
 Note that a bare attribute is identical to `''`. This is used for several flag-like properties. 
 (e.g. `<tippy interactive></tippy>`)

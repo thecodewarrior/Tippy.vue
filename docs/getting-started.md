@@ -1,10 +1,105 @@
 # Getting Started
 
+## CDN
+
+Tippy.vue doesn't bundle Tippy.js, so that needs to be added before Tippy.vue. The most up-to-date install process is 
+explained [in the Tippy docs](https://atomiks.github.io/tippyjs/v6/getting-started/#2-cdn), but I'll include the Tippy
+instructions as of the time of writing. 
+
+To include Tippy.vue, add the Tippy.js scripts, then the Tippy.vue script:
+```html
+<!-- Development -->
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+<script src="https://unpkg.com/tippy.vue@3"></script>
+
+<!-- Production -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+<script src="https://unpkg.com/tippy.vue@3"></script>
+```
+
+You can use Tippy.vue as a plugin or access the individual components directly:
+```js
+// use the plugin
+app.use(TippyVue);
+app.use(TippyVue, {
+  // convenience to set tippy.js default props
+});
+
+// or add them individually
+app.directive('tippy', TippyVue.TippyDirective);
+app.component('tippy', TippyVue.Tippy);
+app.component('tippy-singleton', TippyVue.TippySingleton);
+tippy.setDefaultProps({
+  // default tippy props
+});
+```
+
+## Package Manager
+
+```shell
+npm install --save tippy.vue
+yarn add tippy.vue
+```
+
+In your application you can define the components globally using the plugin or on your own:
+```js
+// use the plugin
+import {TippyPlugin} from 'tippy.vue';
+
+app.use(TippyPlugin);
+app.use(TippyPlugin, {
+  // convenience to set tippy.js default props
+});
+
+// or add them individually
+import {TippyDirective, Tippy, TippySingleton} from 'tippy.vue';
+import tippy from 'tippy.js'
+
+app.directive('tippy', TippyDirective);
+app.component('tippy', Tippy);
+app.component('tippy-singleton', TippySingleton);
+tippy.setDefaultProps({
+  // default tippy props
+});
+```
+
+You will also have to include the Tippy.js CSS in your global stylesheet:
+```css
+@import '~tippy.js/dist/tippy.css';
+```
+
+You can also add them in individual components:
+```vue
+<template>
+  <div v-tippy>Wow</div>
+  <tippy>Cool</tippy>
+</template>
+
+<script>
+import {Tippy, TippyDirective} from 'tippy.vue'
+
+export default {
+  components: {
+    Tippy
+  },
+  directives: {
+    tippy: TippyDirective
+  }
+}
+</script>
+```
+
+# Demo
+
 ## `v-tippy`
 
-The most basic tooltips can be created purely using the `v-tippy` directive. The value of the directive either a string 
-or a [tippy props object](https://atomiks.github.io/tippyjs/v6/all-props/). The v-tippy directive is also used without
-a value (`<... v-tippy>`) to mark targets for the `<tippy>` component.
+The most basic tooltips can be created purely using the `v-tippy` directive. The value of the directive is either a
+string or a [tippy props object](https://atomiks.github.io/tippyjs/v6/all-props/). The `v-tippy` directive is also used
+without a value (`<... v-tippy>`) to mark targets for the `<tippy>` component.
 
 <demo v-slot="{seconds}">
   <button v-tippy="'Some content'">Static</button>
@@ -74,8 +169,8 @@ tooltipped elements.
 ### `deep-search`
 
 If you need to search in more than just the siblings, you can use `deep-search`, which instead uses `querySelector` on
-the parent element. You can bind to deeply nested elements at the cost of not being able to chain them (since 
-`querySelector` always returns the first element, all your tooltips will bind to the first item) 
+the parent element. You can bind to deeply nested elements at the cost of not being able to chain them (since
+`querySelector` always returns the first element, all your tooltips will bind to the first item)
 
 <demo>
   <tippy target="box" deep-search>Attachment</tippy>
@@ -126,14 +221,6 @@ Singletons with tippy-singleton
 </demo>
 
 ```vue
-<tippy-singleton/>
-<button v-tippy>1</button>
-<tippy singleton :extra="{delay: 500}">Item 1</tippy>
-<button v-tippy>2</button>
-<tippy singleton :extra="{delay: 500}">Item 2</tippy>
-<button v-tippy>3</button>
-<tippy singleton :extra="{delay: 500}">Item 3</tippy>
-<!-- or... -->
 <tippy-singleton :extra="{delay: 500}"/>
 <button v-tippy>1</button>
 <tippy singleton>Item 1</tippy>
@@ -143,8 +230,9 @@ Singletons with tippy-singleton
 <tippy singleton>Item 3</tippy>
 ```
 
-`tippy-singleton` uses a variation of the search algorithm used by the tippy target. On each level of the hierarchy it's
-identical, but it progressively searches through its parent elements.
+`tippy-singleton` uses a variation of the search algorithm used by the tippy target. On each level of the hierarchy it
+looks for the nearest previous singleton, then the nearest next singleton. If it doesn't find one, it repeats the search
+in the parent element.
 
 <demo>
   <tippy-singleton :extra="{delay: 500}"/>
