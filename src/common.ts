@@ -134,28 +134,30 @@ export function commonSetup<E extends typeof commonEmits>(
 
   const propRefs = toRefs(props)
   watch(propRefs.enabled, value => {
-      if (value) {
-        tip.value?.enable();
-      } else {
-        tip.value?.hide();
-        tip.value?.disable();
-      }
+    if(!tip.value) return;
+    if (value) {
+      tip.value.enable();
+    } else {
+      tip.value.hide();
+      tip.value.disable();
+    }
   })
 
   const visibleRef = (propRefs as any)['visible']
   if(visibleRef) {
     watch(visibleRef, value => {
-      if (props.trigger !== 'manual') return;
+      if (!tip.value || props.trigger !== 'manual') return;
       if (value) {
-        tip.value?.show();
+        tip.value.show();
       } else {
-        tip.value?.hide();
+        tip.value.hide();
       }
     })
   }
 
   watch(tippyOptions, value => {
-    tip.value?.setProps(value)
+    if(tip.value)
+      tip.value.setProps(value)
   }, {
     deep: true
   })

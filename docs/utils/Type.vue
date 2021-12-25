@@ -15,7 +15,7 @@ const props = defineProps({
 })
 
 let content = computed<string>(() => {
-  return props.op ?? props.punc ?? props.builtin ?? props.type ?? props.string
+  return props.op || props.punc || props.builtin || props.type || props.string
 })
 let classes = computed<string[]>(() => {
   let tokenClass =

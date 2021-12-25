@@ -63,7 +63,7 @@ const TippySingleton = defineComponent({
     const singleton = ref<CreateSingletonInstance>()
     const { tippyOptions } = commonSetup(props, context, singleton, options => {
       const sOptions = options as CreateSingletonProps
-      sOptions.overrides = (sOptions.overrides ?? []).concat(props.overrides ?? [])
+      sOptions.overrides = (sOptions.overrides || []).concat(props.overrides || [])
       options.moveTransition = props.moveTransition
       return options
     })
@@ -84,7 +84,7 @@ const TippySingleton = defineComponent({
     }
   },
   beforeUnmount() {
-    this.singleton?.destroy()
+    this.singleton && this.singleton.destroy()
   },
   methods: {
     remove(instance: TippyInstance) {
@@ -94,7 +94,7 @@ const TippySingleton = defineComponent({
       }
       this.instances.splice(index, 1)
       this.$emit('remove', instance)
-      this.singleton?.setInstances(this.instances as TippyInstance[])
+      this.singleton && this.singleton.setInstances(this.instances as TippyInstance[])
     },
 
     add(instance: TippyInstance) {
@@ -103,7 +103,7 @@ const TippySingleton = defineComponent({
       }
       this.instances.push(instance)
       this.$emit('add', instance)
-      this.singleton?.setInstances(this.instances as TippyInstance[])
+      this.singleton && this.singleton.setInstances(this.instances as TippyInstance[])
     }
   }
 })

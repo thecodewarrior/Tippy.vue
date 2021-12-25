@@ -69,7 +69,10 @@ const Tippy = defineComponent({
       if (this.tip) {
         const tip = this.tip
         this.tip = undefined
-        this.singletonInstance?.remove(tip)
+        if(this.singletonInstance) {
+          this.singletonInstance.remove(tip)
+          this.singletonInstance = undefined
+        }
         tip.destroy();
       }
 
@@ -83,7 +86,8 @@ const Tippy = defineComponent({
         const targetValue = this.target
         target = findElement(this.$el, {
           test(el): boolean {
-            return (el as any)?.dataset?.tippyTarget === targetValue
+            let a = el as any
+            return a && a.dataset && a.dataset.tippyTarget === targetValue
           }
         })
       }
@@ -97,11 +101,12 @@ const Tippy = defineComponent({
         const targetValue = this.singleton
         const singletonElement = findElement(this.$el, {
           test(el): boolean {
-            return (el as any)?.dataset?.tippySingleton === targetValue
+            let a = el as any
+            return a && a.dataset && a.dataset.tippySingleton === targetValue
           },
           recurse: true
         })
-        this.singletonInstance = singletonElement?._tippySingleton
+        this.singletonInstance = singletonElement ? singletonElement._tippySingleton : undefined;
       } else {
         this.singletonInstance = undefined
       }
@@ -112,7 +117,7 @@ const Tippy = defineComponent({
         throw new Error(`Unable to create tippy instance`)
       }
       this.tip.setContent(this.$el)
-      this.singletonInstance?.add(this.tip)
+      this.singletonInstance && this.singletonInstance.add(this.tip)
 
       if (!this.enabled) {
         this.tip.disable();
@@ -129,7 +134,7 @@ const Tippy = defineComponent({
     this.attach()
   },
   beforeUnmount() {
-    this.tip?.destroy()
+    this.tip && this.tip.destroy()
   },
 })
 
@@ -157,7 +162,7 @@ function findElement(start: any, search: StandardSearch): Element | null {
   let found: Element | null = null
   let current = start
   do {
-    found = findSibling(current, search.test, search.selftest ?? false)
+    found = findSibling(current, search.test, search.selftest === undefined ? false : search.selftest)
     current = current.parentElement
   } while(search.recurse && current && !found)
   return found

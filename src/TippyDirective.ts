@@ -24,7 +24,7 @@ const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
   mounted(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props>>): void {
     if (binding.value === undefined) {
       el[_mode] = 'target'
-      el.dataset.tippyTarget = binding.arg ?? ""
+      el.dataset.tippyTarget = binding.arg || ""
     } else {
       el[_mode] = 'inline'
       el[_tippy] = tippy(el, createOptions(binding.value))
@@ -32,14 +32,16 @@ const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
   },
   beforeUnmount(el: HTMLElement): void {
     if (el[_mode] === 'inline') {
-      el[_tippy]?.destroy()
+      let tip = el[_tippy]
+      tip && tip.destroy()
     } else {
       delete el.dataset.tippyTarget;
     }
   },
   updated(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props>>): void {
     if (el[_mode] === 'inline') {
-      el[_tippy]?.setProps(createOptions(binding.value))
+      let tip = el[_tippy]
+      tip && tip.setProps(createOptions(binding.value))
     }
   }
 }
