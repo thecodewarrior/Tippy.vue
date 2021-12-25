@@ -28,7 +28,7 @@ export default [
     external: ['vue', 'tippy.js'],
     output: {
       name: 'TippyVue',
-      file: pkg.browserMin,
+      file: pkg.unpkg,
       format: 'umd',
       sourcemap: true,
       globals: {

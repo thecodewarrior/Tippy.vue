@@ -28,9 +28,8 @@
   ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "browser": "dist/tippy.vue.js",
-  "browserMin": "dist/tippy.vue.min.js",
-  "unpkg": "dist/tippy.vue.min.js",
+  "browser": "dist/index.umd.js",
+  "unpkg": "dist/index.umd.min.js",
   "scripts": {
     "build": "rollup --config",
     "docs:dev": "vuepress dev docs",
