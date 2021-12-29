@@ -1,5 +1,5 @@
 import {Instance as TippyInstance, Placement, Props} from "tippy.js";
-import {computed, ExtractPropTypes, PropType, Ref, toRefs, watch} from "vue";
+import {computed, ExtractPropTypes, Prop, PropType, Ref, toRefs, watch} from "vue";
 import {SetupContext} from "@vue/runtime-core";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -13,6 +13,27 @@ export const commonEmits = {
   untrigger: (instance: TippyInstance, event: Event) => true,
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+const delayPattern = /^([0-9]+)$|^([0-9]+|-)(?:\s*,\s*([0-9]+|-))?$/
+function parseDelay(input: string | number | [number | null, number | null]): number | [number | null, number | null] | undefined {
+  if(typeof input === "string") {
+    let match = input.match(delayPattern)
+    if(match) {
+      if(match[1]) {
+        return parseFloat(match[1])
+      } else {
+        return [
+          match[2] === '-' ? null : parseFloat(match[2]),
+          match[3] === '-' ? null : parseFloat(match[3])
+        ]
+      }
+    } else {
+      return undefined
+    }
+  } else {
+    return input
+  }
+}
 
 export const commonProps = {
   /**
@@ -88,6 +109,21 @@ export const commonProps = {
     required: false,
     default: null,
   },
+
+  /**
+   * The delay when showing or hiding the tooltip. One of four formats:
+   * - A number (or number string) representing the delay in milliseconds
+   * - A string consisting of two comma-separated elements representing the show and hide delays, each of which is
+   *   either a number or a '-'
+   * - An array of two `number | null` elements
+   */
+  delay: {
+    type: [String, Number, Array] as PropType<string | number | [number | null, number | null]>,
+    validator(value: string | number | [number | null, number | null]): boolean {
+      return parseDelay(value) !== undefined
+    },
+    required: false,
+  },
 }
 
 export function commonSetup<E extends typeof commonEmits>(
@@ -118,6 +154,9 @@ export function commonSetup<E extends typeof commonEmits>(
     }
     if(props.hideOnClick !== null) {
       options.hideOnClick = props.hideOnClick
+    }
+    if(props.delay !== undefined) {
+      options.delay = parseDelay(props.delay)
     }
     Object.assign(options, props.extra || {});
 

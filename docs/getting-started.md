@@ -188,30 +188,33 @@ the parent element. You can bind to deeply nested elements at the cost of not be
 
 ### Singletons
 
+Singletons allow a single tippy element to be used for multiple tippy instances. This allows for shared fades, delays,
+and smooth transitions. (See the [Tippy.js demo](https://atomiks.github.io/tippyjs/#singleton) for more)
+
 List without tippy-singleton
 
 <demo>
   <button v-tippy>1</button>
-  <tippy :extra="{delay: 500}">Item 1</tippy>
+  <tippy delay="500">Item 1</tippy>
   <button v-tippy>2</button>
-  <tippy :extra="{delay: 500}">Item 2</tippy>
+  <tippy delay="500">Item 2</tippy>
   <button v-tippy>3</button>
-  <tippy :extra="{delay: 500}">Item 3</tippy>
+  <tippy delay="500">Item 3</tippy>
 </demo>
 
 ```vue
 <button v-tippy>1</button>
-<tippy :extra="{delay: 500}">Item 1</tippy>
+<tippy delay="500">Item 1</tippy>
 <button v-tippy>2</button>
-<tippy :extra="{delay: 500}">Item 2</tippy>
+<tippy delay="500">Item 2</tippy>
 <button v-tippy>3</button>
-<tippy :extra="{delay: 500}">Item 3</tippy>
+<tippy delay="500">Item 3</tippy>
 ```
 
 Singletons with tippy-singleton
 
 <demo>
-  <tippy-singleton :extra="{delay: 500}"/>
+  <tippy-singleton delay="500"/>
   <button v-tippy>1</button>
   <tippy singleton>Item 1</tippy>
   <button v-tippy>2</button>
@@ -221,7 +224,7 @@ Singletons with tippy-singleton
 </demo>
 
 ```vue
-<tippy-singleton :extra="{delay: 500}"/>
+<tippy-singleton delay="500"/>
 <button v-tippy>1</button>
 <tippy singleton>Item 1</tippy>
 <button v-tippy>2</button>
@@ -235,14 +238,14 @@ looks for the nearest previous singleton, then the nearest next singleton. If it
 in the parent element.
 
 <demo>
-  <tippy-singleton :extra="{delay: 500}"/>
+  <tippy-singleton delay="500"/>
   <button v-tippy>1</button>
   <tippy singleton>Item 1</tippy>
   <button v-tippy>2</button>
   <tippy singleton>Item 2</tippy>
   <button v-tippy>3</button>
   <tippy singleton>Item 3</tippy>
-  <tippy-singleton :extra="{delay: 500}"/>
+  <tippy-singleton delay="500"/>
   <button v-tippy>A</button>
   <tippy singleton>Item A</tippy>
   <button v-tippy>B</button>
@@ -252,13 +255,13 @@ in the parent element.
 </demo>
 
 ```vue
-<tippy-singleton :extra="{delay: 500}"/>
+<tippy-singleton delay="500"/>
 <button v-tippy>1</button>
 <tippy singleton>Item 1</tippy>
 <button v-tippy>2</button>
 <tippy singleton>Item 2</tippy>
 
-<tippy-singleton :extra="{delay: 500}"/>
+<tippy-singleton delay="500"/>
 <button v-tippy>A</button>
 <tippy singleton>Item A</tippy>
 <button v-tippy>B</button>
@@ -268,8 +271,8 @@ in the parent element.
 Singletons can be given names and referenced by them for more control.
 
 <demo>
-  <tippy-singleton name="even" :extra="{delay: 500}"></tippy-singleton>
-  <tippy-singleton name="odd" :extra="{delay: 500}"></tippy-singleton>
+  <tippy-singleton name="even" delay="500"></tippy-singleton>
+  <tippy-singleton name="odd" delay="500"></tippy-singleton>
   <template v-for="i in 10">
     <button v-tippy>{{i}}</button>
     <tippy :singleton="i % 2 === 0 ? 'even' : 'odd'">
@@ -279,8 +282,8 @@ Singletons can be given names and referenced by them for more control.
 </demo>
 
 ```vue
-<tippy-singleton name="even" :extra="{delay: 500}"></tippy-singleton>
-<tippy-singleton name="odd" :extra="{delay: 500}"></tippy-singleton>
+<tippy-singleton name="even" delay="500"></tippy-singleton>
+<tippy-singleton name="odd" delay="500"></tippy-singleton>
 <template v-for="i in 10">
   <button v-tippy>{{i}}</button>
   <tippy :singleton="i % 2 === 0 ? 'even' : 'odd'">
