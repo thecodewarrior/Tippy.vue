@@ -14,14 +14,14 @@ The singleton must be in some common parent of all the `<tippy>` components you 
 
 <demo>
 <button v-tippy>Item 1</button>
-<tippy :extra="{delay: 250}">Tip 1</tippy>
+<tippy delay="250">Tip 1</tippy>
 <button v-tippy>Item 2</button>
-<tippy :extra="{delay: 250}">Tip 2</tippy>
+<tippy delay="250">Tip 2</tippy>
 <button v-tippy>Item 3</button>
-<tippy :extra="{delay: 250}">Tip 3</tippy>
+<tippy delay="250">Tip 3</tippy>
 </demo>
 <demo>
-<tippy-singleton :extra="{delay: 250}" move-transition="transform 0.1s ease-out"/>
+<tippy-singleton delay="250" move-transition="transform 0.1s ease-out"/>
 <button v-tippy>Item 1</button>
 <tippy singleton>Tip 1</tippy>
 <button v-tippy>Item 2</button>
@@ -31,7 +31,7 @@ The singleton must be in some common parent of all the `<tippy>` components you 
 </demo>
 
 ```vue
-<tippy-singleton :extra="{delay: 250}" move-transition="transform 0.1s ease-out"/>
+<tippy-singleton delay="250" move-transition="transform 0.1s ease-out"/>
 <button v-tippy>Item 1</button>
 <tippy>Tip 1</tippy>
 <button v-tippy>Item 2</button>
@@ -45,8 +45,8 @@ which singleton to bind to (using the value of their `singleton` prop). In this 
 share their own 500ms timer.
 
 <demo>
-<tippy-singleton name="even" :extra="{delay: 500}"/>
-<tippy-singleton name="odd" :extra="{delay: 500}"/>
+<tippy-singleton name="even" delay="500"/>
+<tippy-singleton name="odd" delay="500"/>
 <template v-for="i in 9" :key="i">
   <button v-tippy>{{i}}</button>
   <tippy :singleton="i % 2 === 0 ? 'even' : 'odd'" >
@@ -56,8 +56,8 @@ share their own 500ms timer.
 </demo>
 
 ```vue
-<tippy-singleton name="even" :extra="{delay: 500}"/>
-<tippy-singleton name="odd" :extra="{delay: 500}"/>
+<tippy-singleton name="even" delay="500"/>
+<tippy-singleton name="odd" delay="500"/>
 <template v-for="i in 9" :key="i">
   <button v-tippy>{{i}}</button>
   <tippy :singleton="i % 2 === 0 ? 'even' : 'odd'" >
