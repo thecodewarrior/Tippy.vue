@@ -84,7 +84,7 @@ The [Tippy.js trigger](https://atomiks.github.io/tippyjs/v6/all-props/#trigger).
 Whether to hide the tooltip when clicking outside it. This defaults to false when using `trigger="manual"` and true 
 otherwise.
 
-### <code>delay<type op=":"/> <type builtin="string"/> <type op="|"/> <type builtin="number"/> <type op="|"/> <type class="Array"/></code> {#delay}
+### <code>delay<type op=":"/> <type builtin="string"/> <type op="|"/> <type builtin="number"/> <type op="|"/> <type type="Array"/></code> {#delay}
 
 The [Tippy.js delay property](https://atomiks.github.io/tippyjs/v6/all-props/#delay), but with some added parsing for
 convenience. The property supports directly passing either a number or an array to the underlying tippy instance. If
