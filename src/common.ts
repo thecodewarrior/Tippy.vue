@@ -105,9 +105,8 @@ export const commonProps = {
    * trigger, otherwise defaults to true.
    */
   hideOnClick: {
-    type: Boolean as PropType<boolean | null>,
+    type: Boolean,
     required: false,
-    default: null,
   },
 
   /**
@@ -152,7 +151,7 @@ export function commonSetup<E extends typeof commonEmits>(
     if(props.interactive === true) {
       options.interactive = true;
     }
-    if(props.hideOnClick !== null) {
+    if(props.hideOnClick !== undefined) {
       options.hideOnClick = props.hideOnClick
     }
     if(props.delay !== undefined) {
