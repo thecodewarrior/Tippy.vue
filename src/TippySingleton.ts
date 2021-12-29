@@ -78,7 +78,7 @@ const TippySingleton = defineComponent({
   },
   mounted() {
     this.$el._tippySingleton = this
-    this.singleton = createSingleton(this.instances as TippyInstance[], this.extra)
+    this.singleton = createSingleton(this.instances as TippyInstance[], this.tippyOptions)
     if (!this.enabled) {
       this.singleton.disable();
     }
