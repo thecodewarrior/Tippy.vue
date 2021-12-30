@@ -2,9 +2,13 @@
 <img src="./tippy+vue.min.svg" alt="Logo" height="100"/>
 </div>
 
-<div align="center">
-<h1>Tippy.vue</h1>
-</div>
+<h1 align="center">
+Tippy.vue
+<br>
+<a href="https://www.npmjs.com/package/tippy.vue"><img src="https://img.shields.io/npm/v/tippy.vue.svg" alt="npm"/></a>
+<a href="https://v3.vuejs.org/"><img src="https://img.shields.io/badge/vue-3.x-brightgreen.svg" alt="Vue 3"/></a>
+<a href="https://www.npmjs.com/package/tippy.vue"><img src="https://img.shields.io/npm/dt/tippy.vue.svg" alt="Download"/></a>
+</h1>
 
 <p align="center">
 Nesting-free Tippy.js components for Vue 3
@@ -17,8 +21,8 @@ might (rightfully) ask, why make another one?
 
 To put it simply, VueTippy makes a few structural concessions which I disagree with. The most significant is that when
 using VueTippy, adding a complex (i.e. non-directive) tooltip to an element will wrap it in a `<span>`, which can easily 
-screw up layout CSS. On top of that, I find their syntax clunky and ugly. Wrapping every tooltipped component in a slot 
-seems unnecessary. 
+screw up layout styles. On top of that, I find their syntax clunky and ugly. Wrapping every tooltipped component in a 
+slot seems unnecessary. 
 
 A clumsy tool will wind up chronically underutilized, so Tippy.vue has been designed from the start with a strong focus 
 on ergonomics. Adding a tooltip is a simple, drop-in addition, with no structural or styling changes necessary.
