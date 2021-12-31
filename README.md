@@ -11,7 +11,7 @@ Tippy.vue
 </h1>
 
 <p align="center">
-Nesting-free Tippy.js components for Vue 3
+Nesting-free <a href="https://atomiks.github.io/tippyjs/">Tippy.js</a> directive/component for Vue 3
 </p>
 
 ## Why?
@@ -195,3 +195,17 @@ tippy.setDefaultProps({
 <tippy singleton>Item 3</tippy>
 ```
 
+## Contributing
+
+Setting up an environment is very standard. Make sure you're on the latest version of yarn, then run:
+```shell
+yarn install
+yarn docs:dev
+```
+
+Tippy.vue doesn't have a vue property for every Tippy.js prop, instead providing `extra` for additional options. This 
+is by design, since it keeps the API clean and easy to understand. I am however open to suggestions for other options 
+that should be exposed directly in Vue, however you'll have to convince me they'll be useful enough to warrant the 
+increase in API complexity. 
+
+In the future I intend to implement a sort of meta-plugin system that would allow user-defined shorthand props.
