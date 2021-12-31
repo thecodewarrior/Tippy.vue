@@ -1,0 +1,19 @@
+{
+  "tippy/target": {"description": "The v-tippy target name - string"},
+  "tippy/deep-search": {"description": "Whether to search using querySelector - boolean | ''"},
+  "tippy/singleton": {"description": "The <tippy-singleton> name - string | ''"},
+  "tippy/visible": {"description": "Controls tooltip visibility when trigger == 'manual'"},
+
+  "tippy-singleton/name": {"description": "The singleton name - string"},
+  "tippy-singleton/overrides": {"description": "What properties in the individual tooltips should override the singleton properties - string[]"},
+  "tippy-singleton/move-transition": {"description": "The move transition - string"},
+
+  "extra": {"description": "Extra Tippy options - object"},
+  "enabled": {"description": "Whether the tooltip should be enabled - boolean"},
+  "placement": {"description": "Where the tooltip should be placed - Placement"},
+  "interactive": {"description": "Whether the tooltip should be interactive - boolean | ''"},
+  "on-body": {"description": "Implement the appendTo: document.body workaround - boolean | ''"},
+  "trigger": {"description": "What should trigger the tooltip - string"},
+  "hide-on-click": {"description": "Whether the tooltip should hide on clicking - boolean | ''"},
+  "delay": {"description": "The delay - number | /[0-9]+/ | [number | null, number | null] | /([0-9]+|-),([0-9]+|-)/"}
+}

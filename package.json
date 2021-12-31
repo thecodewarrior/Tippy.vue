@@ -24,7 +24,8 @@
     "dist/",
     "LICENSE",
     "README.md",
-    "tippy+vue.min.svg"
+    "tippy+vue.min.svg",
+    "package/vetur/"
   ],
   "sideEffects": [
     "*.vue"
@@ -66,5 +67,9 @@
     "vue-template-compiler": "^2.6.14",
     "vuepress": "^2.0.0-beta.27",
     "vuepress-plugin-attrs": "^0.0.0"
+  },
+  "vetur": {
+    "tags": "./package/vetur/tags.json",
+    "attributes": "./package/vetur/attributes.json"
   }
 }

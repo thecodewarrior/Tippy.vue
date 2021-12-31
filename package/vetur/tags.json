@@ -1,0 +1,35 @@
+{
+    "tippy": {
+        "description": "A tooltip",
+        "attributes": [
+            "target",
+            "deep-search",
+            "singleton",
+            "visible",
+            "extra",
+            "enabled",
+            "placement",
+            "interactive",
+            "on-body",
+            "trigger",
+            "hide-on-click",
+            "delay"
+        ]
+    },
+    "tippy-singleton": {
+        "description": "A singleton",
+        "attributes": [
+            "name",
+            "overrides",
+            "move-transition",
+            "extra",
+            "enabled",
+            "placement",
+            "interactive",
+            "on-body",
+            "trigger",
+            "hide-on-click",
+            "delay"
+        ]
+    }
+}
