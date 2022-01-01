@@ -25,7 +25,8 @@
     "LICENSE",
     "README.md",
     "tippy+vue.min.svg",
-    "package/vetur/"
+    "package/vetur/",
+    "package/jetbrains/"
   ],
   "sideEffects": [
     "*.vue"
@@ -71,5 +72,6 @@
   "vetur": {
     "tags": "./package/vetur/tags.json",
     "attributes": "./package/vetur/attributes.json"
-  }
+  },
+  "web-types": "./package/jetbrains/web-types.json"
 }

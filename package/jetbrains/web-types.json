@@ -1,0 +1,172 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/v2-preview/web-types.json",
+  "name": "Tippy.vue",
+  "version": "3.0.0",
+  "js-types-syntax": "typescript",
+  "description-markup": "markdown",
+  "framework": "vue",
+  "contributions": {
+    "html": {
+      "vue-components": [
+        {
+          "name": "Tippy base",
+          "abstract": true,
+          "props": [
+            {
+              "name": "extra",
+              "description": "Extra Tippy options",
+              "type": "object"
+            },
+            {
+              "name": "enabled",
+              "description": "Whether the tooltip should be enabled",
+              "type": "boolean"
+            },
+            {
+              "name": "placement",
+              "description": "Where the tooltip should be placed",
+              "type": "string"
+            },
+            {
+              "name": "interactive",
+              "description": "Whether the tooltip should be interactive",
+              "type": "boolean"
+            },
+            {
+              "name": "onBody",
+              "description": "Implement the appendTo: document.body workaround",
+              "type": "boolean"
+            },
+            {
+              "name": "trigger",
+              "description": "What should trigger the tooltip",
+              "type": "string"
+            },
+            {
+              "name": "hideOnClick",
+              "description": "Whether the tooltip should hide on clicking",
+              "type": "boolean"
+            },
+            {
+              "name": "delay",
+              "description": "The delay",
+              "type": [
+                "number",
+                "string",
+                "[number | null, number | null]"
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "show"
+            },
+            {
+              "name": "shown"
+            },
+            {
+              "name": "hidden"
+            },
+            {
+              "name": "hide"
+            },
+            {
+              "name": "mount"
+            },
+            {
+              "name": "trigger"
+            },
+            {
+              "name": "untrigger"
+            }
+          ]
+        },
+        {
+          "name": "tippy",
+          "extends": "/html/vue-components/Tippy base",
+          "doc-url": "https://thecodewarrior.github.io/Tippy.vue/reference/tippy.html",
+          "props": [
+            {
+              "name": "target",
+              "description": "The v-tippy target name",
+              "type": [
+                "string",
+                "\"_parent\""
+              ]
+            },
+            {
+              "name": "deepSearch",
+              "description": "Whether to search using querySelector",
+              "type": "boolean"
+            },
+            {
+              "name": "singleton",
+              "description": "The <tippy-singleton> name",
+              "type": [
+                "string",
+                "\"\""
+              ]
+            },
+            {
+              "name": "visible",
+              "description": "Controls tooltip visibility when trigger == 'manual'",
+              "type": "boolean"
+            }
+          ],
+          "events": [
+            {
+              "name": "attach"
+            }
+          ],
+          "slots": [
+            {
+              "name": "default"
+            }
+          ]
+        },
+        {
+          "name": "tippy-singleton",
+          "extends": "/html/vue-components/Tippy base",
+          "doc-url": "https://thecodewarrior.github.io/Tippy.vue/reference/tippy.html",
+          "props": [
+            {
+              "name": "name",
+              "description": "The singleton name",
+              "type": "string"
+            },
+            {
+              "name": "overrides",
+              "description": "What properties in the individual tooltips should override the singleton properties",
+              "type": "string[]"
+            },
+            {
+              "name": "moveTransition",
+              "description": "The move transition",
+              "type": "string"
+            }
+          ],
+          "events": [
+            {
+              "name": "add"
+            },
+            {
+              "name": "remove"
+            }
+          ]
+        }
+      ],
+      "vue-directives": [
+        {
+          "name": "tippy",
+          "description": "Define an in-line tooltip or mark an element as a `<tippy>` target",
+          "doc-url": "https://thecodewarrior.github.io/Tippy.vue/reference/v-tippy.html",
+          "argument": {
+            "name": "name",
+            "description": "Optional target name",
+            "pattern": ".*"
+          }
+        }
+      ]
+    }
+  }
+}
