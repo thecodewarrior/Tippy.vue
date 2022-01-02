@@ -84,7 +84,7 @@ import {TippyPlugin} from 'tippy.vue';
 
 app.use(TippyPlugin);
 app.use(TippyPlugin, {
-  // convenience to set tippy.js default props
+  tippyDefaults: {}, // convenience to set tippy.js default props
 });
 ```
 ```js
@@ -97,7 +97,7 @@ app.component('tippy-singleton', TippySingleton);
 
 import tippy from 'tippy.js'
 tippy.setDefaultProps({
-  // default tippy props
+  tippyDefaults: {}, // convenience to set tippy.js default props
 });
 ```
 ```css
@@ -195,6 +195,13 @@ tippy.setDefaultProps({
 <tippy singleton>Item 3</tippy>
 ```
 
+### Custom Props
+
+Tippy.vue doesn't have a vue property for every Tippy.js prop, instead providing `extra` for additional options. This 
+is by design, since it keeps the API clean and easy to understand. You can however add you own props without any 
+modifications to the base library. This is a fairly advanced feature, but it's available if needed. 
+[See the docs](https://thecodewarrior.github.io/Tippy.vue/reference/custom-props.html) for an overview of the API.
+
 ## Contributing
 
 Setting up an environment is very standard. Make sure you're on the latest version of yarn, then run:
@@ -202,10 +209,3 @@ Setting up an environment is very standard. Make sure you're on the latest versi
 yarn install
 yarn docs:dev
 ```
-
-Tippy.vue doesn't have a vue property for every Tippy.js prop, instead providing `extra` for additional options. This 
-is by design, since it keeps the API clean and easy to understand. I am however open to suggestions for other options 
-that should be exposed directly in Vue, however you'll have to convince me they'll be useful enough to warrant the 
-increase in API complexity. 
-
-In the future I intend to implement a sort of meta-plugin system that would allow user-defined shorthand props.
