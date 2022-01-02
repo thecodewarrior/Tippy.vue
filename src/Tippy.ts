@@ -1,142 +1,154 @@
 import {defineComponent, h, nextTick, PropType, ref} from "vue";
-import {commonEmits, commonProps, commonSetup} from "./common";
-import tippy, {Instance as TippyInstance, Placement, Props} from "tippy.js";
+import {commonEmits, commonSetup, TippyProp} from "./common";
+import tippy, {Instance as TippyInstance} from "tippy.js";
 import {VueSingleton} from "./TippySingleton";
+import {delay, enabled, extra, hideOnClick, interactive, onBody, placement, trigger, visible} from "./builtin";
 
-const Tippy = defineComponent({
-  props: {
-    /**
-     * The v-tippy target name. Defaults to `""` (the default name used by `v-tippy`)
-     */
-    target: {
-      type: String as PropType<string | '_parent'>,
-      required: false,
-      default: ""
+export const defaultTippyProps = [
+  visible,
+
+  enabled,
+  placement,
+  onBody,
+  interactive,
+  trigger,
+  hideOnClick,
+  delay,
+  extra,
+]
+
+export function createTippyComponent(...plugins: TippyProp[]) {
+  let pluginProps = {}
+  for (const plugin of plugins) {
+    Object.assign(pluginProps, plugin.props)
+  }
+
+  return defineComponent({
+    props: {
+      /**
+       * The v-tippy target name. Defaults to `""` (the default name used by `v-tippy`)
+       */
+      target: {
+        type: String as PropType<string | '_parent'>,
+        required: false,
+        default: ""
+      },
+      /**
+       * Whether to perform a deep search for targets (using querySelector) or to only search for direct siblings.
+       */
+      deepSearch: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+
+      singleton: {
+        type: String as PropType<string | '' | null>,
+        required: false,
+        default: null,
+      },
+      ...pluginProps
     },
-    /**
-     * Whether to perform a deep search for targets (using querySelector) or to only search for direct siblings.
-     */
-    deepSearch: {
-      type: Boolean,
-      required: false,
-      default: false
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    emits: {
+      attach: (instance: TippyInstance) => true,
+      ...commonEmits
     },
-
-    singleton: {
-      type: String as PropType<string | '' | null>,
-      required: false,
-      default: null,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
+    render() {
+      return h('div', {
+        'tippy-missing-target': this.tippyTargetMissing ? '' : undefined,
+      }, this.$slots.default ? this.$slots.default() : [])
     },
+    setup(props, context) {
+      const tip = ref<TippyInstance>()
+      const { tippyOptions } = commonSetup(props, plugins, context, tip)
 
-    /**
-     * Only used when using the manual trigger. To show/hide when using another trigger, use `tippy().show()` and
-     * `tippy().hide()`
-     */
-    visible: {
-      type: Boolean,
-      required: false,
+      const singletonInstance = ref<VueSingleton>()
+      const tippyTargetMissing = ref<boolean>(false)
+
+      return {
+        tip,
+        tippyOptions,
+        singletonInstance,
+        tippyTargetMissing
+      }
     },
-    ...commonProps
-  },
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  emits: {
-    attach: (instance: TippyInstance) => true,
-    ...commonEmits
-  },
-  /* eslint-enable @typescript-eslint/no-unused-vars */
-  render() {
-    return h('div', {
-      'tippy-missing-target': this.tippyTargetMissing ? '' : undefined,
-    }, this.$slots.default ? this.$slots.default() : [])
-  },
-  setup(props, context) {
-    const tip = ref<TippyInstance>()
-    const { tippyOptions } = commonSetup(props, context, tip)
+    methods: {
+      attach() {
+        // destroy old tip
+        if (this.tip) {
+          const tip = this.tip
+          this.tip = undefined
+          if(this.singletonInstance) {
+            this.singletonInstance.remove(tip)
+            this.singletonInstance = undefined
+          }
+          tip.destroy();
+        }
 
-    const singletonInstance = ref<VueSingleton>()
-    const tippyTargetMissing = ref<boolean>(false)
+        // find the target
+        let target: Element | null
+        if(this.target === '_parent') {
+          target = this.$el.parentElement
+        } else if (this.deepSearch) {
+          target = this.$el.parentElement.querySelector(`[data-tippy-target="${this.target}"]`);
+        } else {
+          const targetValue = this.target
+          target = findElement(this.$el, {
+            test(el): boolean {
+              let a = el as any
+              return a && a.dataset && a.dataset.tippyTarget === targetValue
+            }
+          })
+        }
+        this.tippyTargetMissing = !target
+        if (!target) {
+          throw new Error(`Unable to find tippy target named '${this.target}'`)
+        }
 
-    return {
-      tip,
-      tippyOptions,
-      singletonInstance,
-      tippyTargetMissing
-    }
-  },
-  methods: {
-    attach() {
-      // destroy old tip
-      if (this.tip) {
-        const tip = this.tip
-        this.tip = undefined
-        if(this.singletonInstance) {
-          this.singletonInstance.remove(tip)
+        // find the singleton
+        if (this.singleton != null) {
+          const targetValue = this.singleton
+          const singletonElement = findElement(this.$el, {
+            test(el): boolean {
+              let a = el as any
+              return a && a.dataset && a.dataset.tippySingleton === targetValue
+            },
+            recurse: true
+          })
+          this.singletonInstance = singletonElement ? singletonElement._tippySingleton : undefined;
+        } else {
           this.singletonInstance = undefined
         }
-        tip.destroy();
-      }
 
-      // find the target
-      let target: Element | null
-      if(this.target === '_parent') {
-        target = this.$el.parentElement
-      } else if (this.deepSearch) {
-        target = this.$el.parentElement.querySelector(`[data-tippy-target="${this.target}"]`);
-      } else {
-        const targetValue = this.target
-        target = findElement(this.$el, {
-          test(el): boolean {
-            let a = el as any
-            return a && a.dataset && a.dataset.tippyTarget === targetValue
-          }
-        })
-      }
-      this.tippyTargetMissing = !target
-      if (!target) {
-        throw new Error(`Unable to find tippy target named ${this.target}`)
-      }
+        // create and bind tip
+        this.tip = tippy(target, this.tippyOptions);
+        if (!this.tip) {
+          throw new Error(`Unable to create tippy instance`)
+        }
+        this.tip.setContent(this.$el)
+        this.singletonInstance && this.singletonInstance.add(this.tip)
 
-      // find the singleton
-      if (this.singleton != null) {
-        const targetValue = this.singleton
-        const singletonElement = findElement(this.$el, {
-          test(el): boolean {
-            let a = el as any
-            return a && a.dataset && a.dataset.tippySingleton === targetValue
-          },
-          recurse: true
-        })
-        this.singletonInstance = singletonElement ? singletonElement._tippySingleton : undefined;
-      } else {
-        this.singletonInstance = undefined
-      }
+        if((this as any).enabled === false) {
+          this.tip.disable();
+        }
+        if ((this as any).trigger === 'manual' && (this as any).visible === true) {
+          this.tip.show();
+        }
 
-      // create and bind tip
-      this.tip = tippy(target, this.tippyOptions);
-      if (!this.tip) {
-        throw new Error(`Unable to create tippy instance`)
+        this.$emit("attach", this.tip);
       }
-      this.tip.setContent(this.$el)
-      this.singletonInstance && this.singletonInstance.add(this.tip)
-
-      if (!this.enabled) {
-        this.tip.disable();
-      }
-      if (this.trigger === 'manual' && this.visible === true) {
-        this.tip.show();
-      }
-
-      this.$emit("attach", this.tip);
-    }
-  },
-  async mounted() {
-    await nextTick()
-    this.attach()
-  },
-  beforeUnmount() {
-    this.tip && this.tip.destroy()
-  },
-})
+    },
+    async mounted() {
+      await nextTick()
+      this.attach()
+    },
+    beforeUnmount() {
+      this.tip && this.tip.destroy()
+    },
+  })
+}
 
 type StandardSearch = {
   /**
@@ -182,5 +194,3 @@ function findSibling(element: Element, test: (element: Element) => boolean, test
   }
   return null;
 }
-
-export default Tippy;

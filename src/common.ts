@@ -1,5 +1,5 @@
-import {Instance as TippyInstance, Placement, Props} from "tippy.js";
-import {computed, ExtractPropTypes, Prop, PropType, Ref, toRefs, watch} from "vue";
+import tippy, {Instance as TippyInstance, Props} from "tippy.js";
+import {ComponentPropsOptions, computed, ExtractPropTypes, Ref, ToRefs, toRefs, watch} from "vue";
 import {SetupContext} from "@vue/runtime-core";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -14,150 +14,28 @@ export const commonEmits = {
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
-const delayPattern = /^([0-9]+)$|^([0-9]+|-)(?:\s*,\s*([0-9]+|-))?$/
-function parseDelay(input: string | number | [number | null, number | null]): number | [number | null, number | null] | undefined {
-  if(typeof input === "string") {
-    let match = input.match(delayPattern)
-    if(match) {
-      if(match[1]) {
-        return parseFloat(match[1])
-      } else {
-        return [
-          match[2] === '-' ? null : parseFloat(match[2]),
-          match[3] === '-' ? null : parseFloat(match[3])
-        ]
-      }
-    } else {
-      return undefined
-    }
-  } else {
-    return input
-  }
+export type TippyProp<P extends ComponentPropsOptions = {}> = {
+  props: P,
+  setup?(props: Required<ToRefs<ExtractPropTypes<P>>> & Record<string, Ref<unknown>>, tip: Ref<TippyInstance | undefined>): void
+  build?(props: Required<ToRefs<ExtractPropTypes<P>>> & Record<string, Ref<unknown>>, options: Partial<Props>): void
 }
 
-export const commonProps = {
-  /**
-   * Extra options for tippy.js
-   */
-  extra: {
-    type: Object as PropType<Partial<Props>>,
-    required: false,
-  },
-
-  /**
-   * Whether the tooltip should be enabled
-   */
-  enabled: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-
-  /**
-   * Where to place the tooltip relative to the target element
-   */
-  placement: {
-    type: String as PropType<Placement>,
-    required: false,
-    default: 'top',
-  },
-
-  /**
-   * Whether the tippy should *always* be appended to the `<body>`. You don't need to specify a value for this property,
-   * its presence is sufficient (e.g. `<tippy on-body>`).
-   *
-   * Normally, tooltips will be appended to the document body element, *however*, interactive elements are appended
-   * adjacent to their trigger, in the interest of maintaining keyboard focus order.
-   * [more info](https://atomiks.github.io/tippyjs/v6/accessibility/#clipping-issues)
-   *
-   * This can cause zIndex issues, so sometimes it's necessary to put an interactive tooltip on the body element.
-   *
-   * This is a shorthand for `appendTo: () => document.body` in the `extra` property. (Note that you can't access
-   * `document` directly in a vue template, so you would have to use a computed property if you wanted to set this in
-   * `extra` yourself.
-   */
-  onBody: {
-    type: Boolean,
-    required: false,
-  },
-
-  /**
-   * Whether the tippy should be interactive. You don't need to specify a value for this property, its presence is
-   * sufficient (e.g. `<tippy interactive>`).
-   *
-   * This is a shorthand for `interactive: true` in the `extra` property.
-   */
-  interactive: {
-    required: false,
-    type: Boolean
-  },
-
-  /**
-   * The events that trigger the tooltip. Setting the trigger key in `extra` will override this property.
-   */
-  trigger: {
-    type: String,
-    required: false,
-  },
-
-  /**
-   * Whether to hide the tooltip when the target element is clicked. Defaults to false when using the `'manual'`
-   * trigger, otherwise defaults to true.
-   */
-  hideOnClick: {
-    type: Boolean,
-    required: false,
-  },
-
-  /**
-   * The delay when showing or hiding the tooltip. One of four formats:
-   * - A number (or number string) representing the delay in milliseconds
-   * - A string consisting of two comma-separated elements representing the show and hide delays, each of which is
-   *   either a number or a '-'
-   * - An array of two `number | null` elements
-   */
-  delay: {
-    type: [String, Number, Array] as PropType<string | number | [number | null, number | null]>,
-    validator(value: string | number | [number | null, number | null]): boolean {
-      return parseDelay(value) !== undefined
-    },
-    required: false,
-  },
-}
-
-export function commonSetup<E extends typeof commonEmits>(
-    props: ExtractPropTypes<typeof commonProps>,
+export function commonSetup<P extends TippyProp[], E extends typeof commonEmits>(
+    props: Record<string, unknown>,
+    plugins: P,
     baseContext: SetupContext<E>,
-    tip: Ref<TippyInstance | undefined>,
-    transformOptions: (options: Partial<Props>) => Partial<Props> = value => value
+    tip: Ref<TippyInstance | undefined>
 ) {
   const context = baseContext as unknown as SetupContext<typeof commonEmits>
 
+  let refs = toRefs(props)
   const tippyOptions = computed<Partial<Props>>(() => {
     const options: Partial<Props> = {}
 
-    if(props.trigger) {
-      options.trigger = props.trigger;
-      if(props.trigger === 'manual')
-        options.hideOnClick = false;
+    for (const plugin of plugins) {
+      let buildFn = plugin.build
+      if(buildFn) buildFn(refs, options)
     }
-
-    if(props.placement) {
-      options.placement = props.placement;
-    }
-    if(props.onBody === true) {
-      options.appendTo = () => document.body;
-    }
-    if(props.interactive === true) {
-      options.interactive = true;
-    }
-    if(props.hideOnClick !== undefined) {
-      options.hideOnClick = props.hideOnClick
-    }
-    if(props.delay !== undefined) {
-      options.delay = parseDelay(props.delay)
-    }
-    Object.assign(options, props.extra || {});
 
     options.onShow = injectCallback(options.onShow, instance => context.emit("show", instance))
     options.onShown = injectCallback(options.onShown, instance => context.emit("shown", instance))
@@ -167,30 +45,12 @@ export function commonSetup<E extends typeof commonEmits>(
     options.onTrigger = injectCallback(options.onTrigger, (instance, event) => context.emit("trigger", instance, event))
     options.onUntrigger = injectCallback(options.onUntrigger, (instance, event) => context.emit("untrigger", instance, event))
 
-    return transformOptions(options);
+    return options;
   })
 
-  const propRefs = toRefs(props)
-  watch(propRefs.enabled, value => {
-    if(!tip.value) return;
-    if (value) {
-      tip.value.enable();
-    } else {
-      tip.value.hide();
-      tip.value.disable();
-    }
-  })
-
-  const visibleRef = (propRefs as any)['visible']
-  if(visibleRef) {
-    watch(visibleRef, value => {
-      if (!tip.value || props.trigger !== 'manual') return;
-      if (value) {
-        tip.value.show();
-      } else {
-        tip.value.hide();
-      }
-    })
+  for (const plugin of plugins) {
+    let setupFn = plugin.setup
+    if (setupFn) setupFn(refs, tip)
   }
 
   watch(tippyOptions, value => {

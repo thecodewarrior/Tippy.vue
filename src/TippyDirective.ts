@@ -20,7 +20,7 @@ function createOptions(value: string | Partial<Props>): Partial<Props> {
   }
 }
 
-const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
+export const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
   mounted(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props>>): void {
     if (binding.value === undefined) {
       el[_mode] = 'target'
@@ -45,5 +45,3 @@ const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
     }
   }
 }
-
-export default TippyDirective
