@@ -27,7 +27,8 @@ module.exports = <Partial<AppOptions>>{
       '/reference/': [
         '/reference/v-tippy.md',
         '/reference/tippy.md',
-        '/reference/tippy-singleton.md'
+        '/reference/tippy-singleton.md',
+        '/reference/custom-props.md',
       ]
     },
 
@@ -37,7 +38,8 @@ module.exports = <Partial<AppOptions>>{
         text: 'Reference', children: [
           {text: 'v-tippy', link: '/reference/v-tippy.md'},
           {text: '<tippy>', link: '/reference/tippy.md'},
-          {text: '<tippy-singleton>', link: '/reference/tippy-singleton.md'}
+          {text: '<tippy-singleton>', link: '/reference/tippy-singleton.md'},
+          {text: 'Custom Props', link: '/reference/custom-props.md'},
         ]
       },
     ],

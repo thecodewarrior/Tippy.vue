@@ -55,6 +55,15 @@
                 "string",
                 "[number | null, number | null]"
               ]
+            },
+            {
+              "name": "custom",
+              "pattern": "t-.*",
+              "description": "A custom prop",
+              "type": [
+                "any",
+                "\"\""
+              ]
             }
           ],
           "events": [

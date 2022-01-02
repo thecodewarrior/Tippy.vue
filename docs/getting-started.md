@@ -41,7 +41,7 @@ import {TippyPlugin} from 'tippy.vue';
 
 app.use(TippyPlugin);
 app.use(TippyPlugin, {
-  // convenience to set tippy.js default props
+  tippyDefaults: {}, // convenience to set tippy.js default props
 });
 
 // or add them individually
@@ -90,7 +90,7 @@ export default {
 // use the plugin
 app.use(TippyVue);
 app.use(TippyVue, {
-  // convenience to set tippy.js default props
+  tippyDefaults: {}, // convenience to set tippy.js default props
 });
 
 // or add them individually
