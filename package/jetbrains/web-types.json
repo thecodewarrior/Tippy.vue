@@ -25,7 +25,26 @@
             {
               "name": "placement",
               "description": "Where the tooltip should be placed",
-              "type": "string"
+              "attribute-value": {
+                "type": "enum"
+              },
+              "values": [
+                {"name": "top"},
+                {"name": "top-start"},
+                {"name": "top-end"},
+                {"name": "bottom"},
+                {"name": "bottom-start"},
+                {"name": "bottom-end"},
+                {"name": "left"},
+                {"name": "left-start"},
+                {"name": "left-end"},
+                {"name": "right"},
+                {"name": "right-start"},
+                {"name": "right-end"},
+                {"name": "auto"},
+                {"name": "auto-start"},
+                {"name": "auto-end"}
+              ]
             },
             {
               "name": "interactive",
