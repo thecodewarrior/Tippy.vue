@@ -97,7 +97,7 @@ app.component('tippy-singleton', TippySingleton);
 
 import tippy from 'tippy.js'
 tippy.setDefaultProps({
-  tippyDefaults: {}, // convenience to set tippy.js default props
+  // default tippy props
 });
 ```
 ```css
@@ -134,7 +134,7 @@ export default {
 // use the plugin
 app.use(TippyVue);
 app.use(TippyVue, {
-  // convenience to set tippy.js default props
+  tippyDefaults: {}, // convenience to set tippy.js default props
 });
 ```
 ```js
