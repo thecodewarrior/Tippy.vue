@@ -22,8 +22,6 @@ actions:
   <button class="big-button" v-tippy="{content: 'Current time: ' + seconds, onShow: () => source = 'directive'}">v-tippy</button>
 </demo>
 
-[comment]: <> (<div :style="{visibility: source === 'component' ? 'visible' : 'hidden'}">)
-
 <div class="hero-source">
 <div :class="{'source-hidden': source !== 'component'}">
 
@@ -58,6 +56,7 @@ let source = ref("component")
   display: grid;
   justify-content: center;
   margin: .85rem 0;
+  grid-template-columns: minmax(0, auto);
 }
 .hero-source > * {
   grid-area: 1 / 1;
