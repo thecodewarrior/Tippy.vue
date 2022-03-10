@@ -35,6 +35,7 @@
   "module": "dist/index.esm.js",
   "browser": "dist/index.umd.js",
   "unpkg": "dist/index.umd.min.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "build": "rollup --config",
     "docs:dev": "vuepress dev docs",
@@ -62,6 +63,7 @@
     "eslint-plugin-vue": "^7.0.0",
     "patch-vue-directive-ssr": "^0.0.1",
     "rollup": "^2.60.2",
+    "rollup-plugin-dts": "^4.2.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1",
     "typescript": "~4.1.5",

@@ -1,6 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import {terser} from 'rollup-plugin-terser';
+import dts from 'rollup-plugin-dts';
 
 const pkg = require('./package.json')
 
@@ -61,5 +62,10 @@ export default [
       typescript(),
       resolve(),
     ]
+  },
+  {
+    input: "src/index.ts",
+    output: [{ file: pkg.typings, format: "es" }],
+    plugins: [dts()],
   },
 ]
