@@ -178,6 +178,9 @@ export default {
 </script>
 ```
 
+Tippy.vue includes code completion files for Vetur and IntelliJ IDEA. You may have to restart your IDE for them to be 
+recognized.
+
 ### 💻 CDN
 
 ```js
