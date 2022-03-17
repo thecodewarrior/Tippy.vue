@@ -43,7 +43,7 @@ export function createTippyComponent(...plugins: TippyProp[]) {
       },
 
       singleton: {
-        type: String as PropType<string | '' | null>,
+        type: String as PropType<boolean | string | '' | null>,
         required: false,
         default: null,
       },
