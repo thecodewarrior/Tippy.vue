@@ -17,6 +17,6 @@ jobs:
           cache: 'yarn'
       - run: yarn install
       - run: yarn build
-      - run: npm publish --access public --tag ${{ github.event.release.tag_name }}
+      - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
