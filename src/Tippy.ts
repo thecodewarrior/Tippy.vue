@@ -1,8 +1,20 @@
-import {defineComponent, h, nextTick, PropType, ref} from "vue";
-import {commonEmits, commonSetup, TippyProp} from "./common";
-import tippy, {Instance as TippyInstance} from "tippy.js";
+import {ComputedRef, defineComponent, h, nextTick, Ref, ref} from "vue";
+import {PropType} from "@vue/runtime-core";
+import {commonEmits, commonSetup, Plugin} from "./common";
+import tippy, {Instance as TippyInstance, Props as TippyProps} from "tippy.js";
 import {VueSingleton} from "./TippySingleton";
-import {delay, enabled, extra, hideOnClick, interactive, onBody, placement, trigger, visible} from "./builtin";
+import {
+  delay,
+  enabled,
+  extra,
+  hideOnClick,
+  interactive,
+  onBody,
+  placement,
+  trigger,
+  visible
+} from "./builtin";
+import {DefineComponent, ExtractPluginProps} from "./types";
 
 export const defaultTippyProps = [
   visible,
@@ -17,7 +29,38 @@ export const defaultTippyProps = [
   extra,
 ]
 
-export function createTippyComponent(...plugins: TippyProp[]) {
+const baseProps = {
+  /**
+   * The v-tippy target name. Defaults to `""` (the default name used by `v-tippy`)
+   */
+  target: {
+    type: String as PropType<string | '_parent'>,
+    required: false,
+    default: ""
+  },
+  /**
+   * Whether to perform a deep search for targets (using querySelector) or to only search for direct siblings.
+   */
+  deepSearch: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+
+  singleton: {
+    type: String as PropType<boolean | string | '' | null>,
+    required: false,
+    default: null,
+  },
+}
+
+export type TippyComponentType<Plugins extends Plugin[] = [], DefaultPlugins extends Plugin[] = typeof defaultTippyProps> = DefineComponent<//
+    /* Props = */ typeof baseProps & ExtractPluginProps<Plugins[number] | DefaultPlugins[number]>,
+    /* Emits = */ typeof commonEmits & { attach: (instance: TippyInstance) => true },
+    /* Data = */ { tip: Ref<TippyInstance | undefined>, tippyOptions: ComputedRef<Partial<TippyProps>> },
+    /* Methods = */ { attach(): void }>;
+
+export function createTippyComponent<P extends Plugin[]>(...plugins: P): TippyComponentType<P> {
   let pluginProps = {}
   for (const plugin of plugins) {
     Object.assign(pluginProps, plugin.props)
@@ -25,28 +68,7 @@ export function createTippyComponent(...plugins: TippyProp[]) {
 
   return defineComponent({
     props: {
-      /**
-       * The v-tippy target name. Defaults to `""` (the default name used by `v-tippy`)
-       */
-      target: {
-        type: String as PropType<string | '_parent'>,
-        required: false,
-        default: ""
-      },
-      /**
-       * Whether to perform a deep search for targets (using querySelector) or to only search for direct siblings.
-       */
-      deepSearch: {
-        type: Boolean,
-        required: false,
-        default: false
-      },
-
-      singleton: {
-        type: String as PropType<boolean | string | '' | null>,
-        required: false,
-        default: null,
-      },
+      ...baseProps,
       ...pluginProps
     },
     /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -147,7 +169,7 @@ export function createTippyComponent(...plugins: TippyProp[]) {
     beforeUnmount() {
       this.tip && this.tip.destroy()
     },
-  })
+  }) as unknown as TippyComponentType<P>
 }
 
 type StandardSearch = {

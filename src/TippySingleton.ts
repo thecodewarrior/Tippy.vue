@@ -1,5 +1,6 @@
-import {defineComponent, h, PropType, ref} from "vue";
-import {commonEmits, commonSetup, TippyProp} from "./common";
+import {defineComponent, h, Ref, ref} from "vue";
+import {PropType} from "@vue/runtime-core";
+import {commonEmits, commonSetup, Plugin} from "./common";
 import {createSingleton, CreateSingletonInstance, Instance as TippyInstance} from "tippy.js";
 import {
   delay,
@@ -12,6 +13,7 @@ import {
   placement,
   trigger
 } from "./builtin";
+import {DefineComponent, ExtractPluginProps} from "./types";
 
 export type VueSingleton = {
   add(instance: TippyInstance): void,
@@ -38,7 +40,24 @@ export const defaultTippySingletonProps = [
   extra,
 ]
 
-export function createTippySingletonComponent(...plugins: TippyProp[]) {
+const baseProps = {
+  /**
+   * The singleton name. Defaults to `""` (the default name used by `<tippy singleton>`)
+   */
+  name: {
+    type: String as PropType<string>,
+    required: false,
+    default: ""
+  },
+}
+
+export type TippySingletonComponentType<Plugins extends Plugin[] = [], DefaultPlugins extends Plugin[] = typeof defaultTippySingletonProps> = DefineComponent<//
+    /* Props = */ typeof baseProps & ExtractPluginProps<Plugins[number] | DefaultPlugins[number]>,
+    /* Emits = */ typeof commonEmits & { add: (instance: TippyInstance) => true, remove: (instance: TippyInstance) => true },
+    /* Data = */ { instances: Ref<TippyInstance[]>, singleton: Ref<CreateSingletonInstance> },
+    /* Methods = */ { add(instance: TippyInstance): void, remove(instance: TippyInstance): void }>;
+
+export function createTippySingletonComponent<P extends Plugin[]>(...plugins: P): TippySingletonComponentType<P> {
   let pluginProps = {}
   for (const plugin of plugins) {
     Object.assign(pluginProps, plugin.props)
@@ -46,14 +65,7 @@ export function createTippySingletonComponent(...plugins: TippyProp[]) {
 
   return defineComponent({
     props: {
-      /**
-       * The singleton name. Defaults to `""` (the default name used by `<tippy singleton>`)
-       */
-      name: {
-        type: String as PropType<string>,
-        required: false,
-        default: ""
-      },
+      ...baseProps,
       ...pluginProps
     },
     /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -111,5 +123,5 @@ export function createTippySingletonComponent(...plugins: TippyProp[]) {
         this.singleton && this.singleton.setInstances(this.instances as TippyInstance[])
       }
     }
-  })
+  }) as unknown as TippySingletonComponentType<P>
 }

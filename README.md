@@ -178,9 +178,6 @@ export default {
 </script>
 ```
 
-Tippy.vue includes code completion files for Vetur and IntelliJ IDEA. You may have to restart your IDE for them to be 
-recognized.
-
 ### 💻 CDN
 
 ```js
@@ -199,6 +196,11 @@ tippy.setDefaultProps({
   // default tippy props
 });
 ```
+
+### Code Completion
+
+Tippy.vue includes code completion files for IntelliJ IDEA, Vetur, and Volar. 
+[See the docs](https://thecodewarrior.github.io/Tippy.vue/reference/code-completion.html) for details on how to use them.
 
 ## Contributing
 

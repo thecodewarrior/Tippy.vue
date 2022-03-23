@@ -11,9 +11,7 @@ type TippyProp = {
 }
 ```
 
-By convention, custom props should start with `t-` (`tCustomProp` in code). That's because the IntelliJ code completion 
-has been configured to accept any `t-*` props as custom props. Vetur doesn't have that kind of pattern capability, so
-custom properties won't be recognized in VSCode.
+For example:
 ```js
 const animation = {
   props: {

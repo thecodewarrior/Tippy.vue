@@ -1,18 +1,19 @@
-import {ComponentPropsOptions, ExtractPropTypes, PropType, ToRefs, toRefs, watch} from "vue";
+import {watch} from "vue";
+import {ComponentPropsOptions, PropType} from "@vue/runtime-core";
 import {CreateSingletonProps, Placement, Props} from "tippy.js";
-import {TippyProp} from "./common";
+import {Plugin} from "./common";
 
-function inferProp<P extends ComponentPropsOptions>(plugin: TippyProp<P>): TippyProp<P> {
+function inferPlugin<P extends ComponentPropsOptions>(plugin: Plugin<P>): Plugin<P> {
   return plugin
 }
 
 /**
  * Extra options for tippy.js
  */
-export const extra = inferProp({
+export const extra = inferPlugin({
   props: {
     extra: {
-      type: Object as PropType<Partial<Props> | undefined>,
+      type: Object as PropType<Partial<Props>>,
       required: false,
     },
   },
@@ -24,7 +25,7 @@ export const extra = inferProp({
 /**
  * Whether the tooltip should be enabled
  */
-export const enabled = inferProp({
+export const enabled = inferPlugin({
   props: {
     enabled: {
       type: Boolean,
@@ -49,7 +50,7 @@ export const enabled = inferProp({
 /**
  * Where to place the tooltip relative to the target element
  */
-export const placement = inferProp({
+export const placement = inferPlugin({
   props: {
     placement: {
       type: String as PropType<Placement>,
@@ -70,7 +71,7 @@ export const placement = inferProp({
  *
  * This is a shorthand for `interactive: true` in the `extra` property.
  */
-export const interactive = inferProp({
+export const interactive = inferPlugin({
   props: {
     interactive: {
       type: Boolean,
@@ -89,7 +90,7 @@ export const interactive = inferProp({
  * Whether to hide the tooltip when the target element is clicked. Defaults to false when using the `'manual'`
  * trigger, otherwise defaults to true.
  */
-export const hideOnClick = inferProp({
+export const hideOnClick = inferPlugin({
   props: {
     hideOnClick: {
       type: Boolean,
@@ -117,7 +118,7 @@ export const hideOnClick = inferProp({
  * `document` directly in a vue template, so you would have to use a computed property if you wanted to set this in
  * `extra` yourself.
  */
-export const onBody = inferProp({
+export const onBody = inferPlugin({
   props: {
     onBody: {
       type: Boolean,
@@ -135,7 +136,7 @@ export const onBody = inferProp({
 /**
  * The events that trigger the tooltip. Setting the trigger key in `extra` will override this property.
  */
-export const trigger = inferProp({
+export const trigger = inferPlugin({
   props: {
     trigger: {
       type: String,
@@ -181,13 +182,19 @@ function parseDelay(input: string | number | [number | null, number | null]): nu
  *   either a number or a '-'
  * - An array of two `number | null` elements
  */
-export const delay = inferProp({
+export const delay = inferPlugin<{
+  delay: {
+    type: PropType<string | number | [number | null, number | null]>;
+    required: boolean;
+    validator(value: unknown): boolean;
+  }
+}>({
   props: {
     delay: {
       type: [String, Number, Array] as PropType<string | number | [number | null, number | null]>,
       required: false,
-      validator(value: string | number | [number | null, number | null]): boolean {
-        return parseDelay(value) !== undefined
+      validator(value: unknown): boolean {
+        return parseDelay(value as (string | number | [number | null, number | null])) !== undefined
       }
     }
   },
@@ -202,7 +209,7 @@ export const delay = inferProp({
  * Only used when using the manual trigger. To show/hide when using another trigger, use `tippy().show()` and
  * `tippy().hide()`
  */
-export const visible = inferProp({
+export const visible = inferPlugin({
   props: {
     visible: {
       type: Boolean,
@@ -224,7 +231,7 @@ export const visible = inferProp({
 /**
  * Tippy.js options that should be overridden by the individual instances.
  */
-export const overrides = inferProp({
+export const overrides = inferPlugin({
   props: {
     overrides: {
       type: Array as PropType<Array<keyof Props>>,
@@ -240,7 +247,7 @@ export const overrides = inferProp({
 /**
  * The CSS transition to use when moving between instances within the singleton
  */
-export const moveTransition = inferProp({
+export const moveTransition = inferPlugin({
   props: {
     moveTransition: {
       type: String,

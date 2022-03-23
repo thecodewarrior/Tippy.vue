@@ -1,6 +1,6 @@
 import tippy, {Instance as TippyInstance, Props} from "tippy.js";
-import {ComponentPropsOptions, computed, ExtractPropTypes, Ref, ToRefs, toRefs, watch} from "vue";
-import {SetupContext} from "@vue/runtime-core";
+import {computed, Ref, ToRefs, toRefs, watch} from "vue";
+import {ComponentPropsOptions, ExtractPropTypes, SetupContext} from "@vue/runtime-core";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const commonEmits = {
@@ -14,13 +14,13 @@ export const commonEmits = {
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
-export type TippyProp<P extends ComponentPropsOptions = {}> = {
+export type Plugin<P extends ComponentPropsOptions = {}> = {
   props: P,
   setup?(props: Required<ToRefs<ExtractPropTypes<P>>> & Record<string, Ref<unknown>>, tip: Ref<TippyInstance | undefined>): void
   build?(props: Required<ToRefs<ExtractPropTypes<P>>> & Record<string, Ref<unknown>>, options: Partial<Props>): void
 }
 
-export function commonSetup<P extends TippyProp[], E extends typeof commonEmits>(
+export function commonSetup<P extends Plugin[], E extends typeof commonEmits>(
     props: Record<string, unknown>,
     plugins: P,
     baseContext: SetupContext<E>,

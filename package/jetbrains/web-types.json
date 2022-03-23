@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/v2-preview/web-types.json",
-  "name": "Tippy.vue",
+  "name": "tippy.vue",
   "version": "3.0.0",
   "js-types-syntax": "typescript",
   "description-markup": "markdown",
@@ -68,7 +68,7 @@
             },
             {
               "name": "delay",
-              "description": "The delay",
+              "description": "The show/hide delay for the tooltip. `'10'` => show=10ms,hide=10ms. `'10,-'` => show=10ms,hide=default",
               "type": [
                 "number",
                 "string",

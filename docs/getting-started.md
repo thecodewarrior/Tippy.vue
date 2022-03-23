@@ -102,6 +102,11 @@ tippy.setDefaultProps({
 });
 ```
 
+## Code Completion
+
+Tippy.vue includes code completion files for IntelliJ IDEA, Vetur, and Volar. 
+[See the code completion page](reference/code-completion.md) for details on how to use them.
+
 ## Demo
 
 ### `v-tippy`

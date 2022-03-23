@@ -1,14 +1,14 @@
-import {App, Plugin} from "vue";
+import {App, Plugin as VuePlugin} from "vue";
 import tippy, {DefaultProps} from "tippy.js";
 import {TippyDirective} from "./TippyDirective";
-import {createTippyComponent, defaultTippyProps} from "./Tippy";
-import {createTippySingletonComponent, defaultTippySingletonProps} from "./TippySingleton";
-import {TippyProp} from "./common";
+import {createTippyComponent, defaultTippyProps, TippyComponentType} from "./Tippy";
+import {createTippySingletonComponent, defaultTippySingletonProps, TippySingletonComponentType} from "./TippySingleton";
+import {Plugin} from "./common";
 
 export function install(app: App, options?: {
   tippyDefaults?: Partial<DefaultProps>,
-  tippyProps?: TippyProp[],
-  tippySingletonProps?: TippyProp[],
+  tippyProps?: Plugin[],
+  tippySingletonProps?: Plugin[],
 }) {
   if (options && options.tippyDefaults) {
     tippy.setDefaultProps(options.tippyDefaults)
@@ -24,13 +24,14 @@ export function install(app: App, options?: {
   )
 }
 
-export const TippyPlugin: Plugin = {
+export const TippyPlugin: VuePlugin = {
   install
 }
 export const Tippy = createTippyComponent(...defaultTippyProps)
 export const TippySingleton = createTippySingletonComponent(...defaultTippySingletonProps)
 
-export {TippyDirective} from "./TippyDirective"
+export type {Plugin, TippyComponentType, TippySingletonComponentType};
+export {TippyDirective} from "./TippyDirective";
 export {createTippyComponent, defaultTippyProps} from "./Tippy";
 export {createTippySingletonComponent, defaultTippySingletonProps} from "./TippySingleton";
-export * as props from "./builtin"
+export * as props from "./builtin";

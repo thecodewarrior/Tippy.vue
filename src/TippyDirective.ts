@@ -12,16 +12,18 @@ declare global {
   }
 }
 
-function createOptions(value: string | Partial<Props>): Partial<Props> {
+function createOptions(value: string | Partial<Props> | undefined): Partial<Props> {
   if(typeof value === 'string') {
     return {content: value}
+  } else if(typeof value === 'undefined') {
+    return {}
   } else {
     return value
   }
 }
 
-export const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
-  mounted(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props>>): void {
+export const TippyDirective: Directive<HTMLElement, string | Partial<Props> | undefined> = {
+  mounted(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props> | undefined>): void {
     if (binding.value === undefined) {
       el[_mode] = 'target'
       el.dataset.tippyTarget = binding.arg || ""
@@ -38,7 +40,7 @@ export const TippyDirective: Directive<HTMLElement, string | Partial<Props>> = {
       delete el.dataset.tippyTarget;
     }
   },
-  updated(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props>>): void {
+  updated(el: HTMLElement, binding: DirectiveBinding<string | Partial<Props> | undefined>): void {
     if (el[_mode] === 'inline') {
       let tip = el[_tippy]
       tip && tip.setProps(createOptions(binding.value))
