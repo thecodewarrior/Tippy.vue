@@ -154,8 +154,9 @@ export const trigger = inferPlugin({
 })
 
 const delayPattern = /^([0-9]+)$|^([0-9]+|-)\s*,\s*([0-9]+|-)$/
+type DelayType = number | [number | null, number | null] | `${number}` | `${number | '-'},${number | '-'}`
 
-function parseDelay(input: string | number | [number | null, number | null]): number | [number | null, number | null] | undefined {
+function parseDelay(input: DelayType): number | [number | null, number | null] | undefined {
   if (typeof input === "string") {
     let match = input.match(delayPattern)
     if (match) {
@@ -184,23 +185,23 @@ function parseDelay(input: string | number | [number | null, number | null]): nu
  */
 export const delay = inferPlugin<{
   delay: {
-    type: PropType<string | number | [number | null, number | null]>;
+    type: PropType<DelayType>;
     required: boolean;
     validator(value: unknown): boolean;
   }
 }>({
   props: {
     delay: {
-      type: [String, Number, Array] as PropType<string | number | [number | null, number | null]>,
+      type: [String, Number, Array] as PropType<DelayType>,
       required: false,
       validator(value: unknown): boolean {
-        return parseDelay(value as (string | number | [number | null, number | null])) !== undefined
+        return parseDelay(value as DelayType) !== undefined
       }
     }
   },
   build(props, options) {
     if (props.delay.value !== undefined) {
-      options.delay = parseDelay(props.delay.value as string | number | [number | null, number | null])
+      options.delay = parseDelay(props.delay.value)
     }
   }
 })

@@ -71,8 +71,9 @@
               "description": "The show/hide delay for the tooltip. `'10'` => show=10ms,hide=10ms. `'10,-'` => show=10ms,hide=default",
               "type": [
                 "number",
-                "string",
-                "[number | null, number | null]"
+                "[number | null, number | null]",
+                "`${number}`",
+                "`${number | '-'},${number | '-'}`"
               ]
             },
             {
