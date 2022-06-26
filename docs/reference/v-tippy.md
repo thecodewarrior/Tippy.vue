@@ -6,21 +6,25 @@ no value (e.g. `<div v-tippy>`) it starts up in ["target mode"](#target-mode), o
 
 ## Inline mode
 
-The `v-tippy` directive can be used to define a tooltip in-line, either as a string or a 
-[Tippy.js props object](https://atomiks.github.io/tippyjs/v6/all-props/). The tooltip will automatically update if the text 
-or any of the props change.
+The `v-tippy` directive can be used to define a tooltip in-line, either as a string or a
+[Tippy.js props object](https://atomiks.github.io/tippyjs/v6/all-props/). The tooltip will automatically update if the
+text or any of the props change. 
 
 <demo v-slot="{seconds}">
-<button v-tippy="'Static text'">Static text</button>
+<button v-tippy="'<strong>Static text</strong>'">Static text</button>
 <button v-tippy="'Current time: ' + seconds">Dynamic text</button>
 <button v-tippy="{content: `Seconds: ${seconds}`, placement: 'right'}">Props object</button>
 </demo>
 
 ```vue
-<button v-tippy="'Static text'">Static text</button>
+<button v-tippy="'<strong>Static text</strong>'">Static text</button>
 <button v-tippy="'Current time: ' + seconds">Dynamic text</button>
 <button v-tippy="{content: `Seconds: ${seconds}`, placement: 'right'}">Props object</button>
 ```
+
+Like the Tippy.js [`content` option](https://atomiks.github.io/tippyjs/v6/html-content/#string), make sure HTML strings
+containing user data are sanitized properly to prevent XSS attacks. For cases involving user data the `<tippy>` 
+component will likely be safer and more convenient.
 
 ## Target mode
 

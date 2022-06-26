@@ -127,6 +127,10 @@ without a value (`<... v-tippy>`) to mark targets for the `<tippy>` component.
 <button v-tippy="{content: 'Some content', placement: 'right'}">Side</button>
 ```
 
+Like the Tippy.js [`content` option](https://atomiks.github.io/tippyjs/v6/html-content/#string), make sure HTML strings
+containing user data are sanitized properly to prevent XSS attacks. For cases involving user data the `<tippy>` 
+component will likely be safer and more convenient.
+
 ### `<tippy>`
 
 The basic mechanic behind the Tippy component is that you first mark an element with `v-tippy`, then when `<tippy>`
