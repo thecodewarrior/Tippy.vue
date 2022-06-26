@@ -139,6 +139,11 @@
               "name": "visible",
               "description": "Controls tooltip visibility when trigger == 'manual'",
               "type": "boolean"
+            },
+            {
+              "name": "eager",
+              "description": "Controls whether the tooltip content should be rendered eagerly or only when the tooltip is actually visible.",
+              "type": "boolean"
             }
           ],
           "events": [

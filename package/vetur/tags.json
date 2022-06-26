@@ -6,6 +6,7 @@
             "deep-search",
             "singleton",
             "visible",
+            "eager",
             "extra",
             "enabled",
             "placement",

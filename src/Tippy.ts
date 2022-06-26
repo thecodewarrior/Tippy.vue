@@ -38,6 +38,7 @@ const baseProps = {
     required: false,
     default: ""
   },
+
   /**
    * Whether to perform a deep search for targets (using querySelector) or to only search for direct siblings.
    */
@@ -51,6 +52,15 @@ const baseProps = {
     type: String as PropType<boolean | string | '' | null>,
     required: false,
     default: null,
+  },
+
+  /**
+   * Whether to eagerly render the content or only render when the tooltip is visible
+   */
+  eager: {
+    type: Boolean,
+    required: false,
+    default: false
   },
 }
 
@@ -80,20 +90,29 @@ export function createTippyComponent<P extends Plugin[]>(...plugins: P): TippyCo
     render() {
       return h('div', {
         'tippy-missing-target': this.tippyTargetMissing ? '' : undefined,
-      }, this.$slots.default ? this.$slots.default() : [])
+      }, (this.$props.eager || this.shouldRenderContent) && this.$slots.default ? this.$slots.default() : [])
     },
     setup(props, context) {
       const tip = ref<TippyInstance>()
-      const { tippyOptions } = commonSetup(props, plugins, context, tip)
-
       const singletonInstance = ref<VueSingleton>()
       const tippyTargetMissing = ref<boolean>(false)
+      const shouldRenderContent = ref<boolean>(false)
+
+      const { tippyOptions } = commonSetup(props, plugins, context, tip, {
+        onShow() {
+          shouldRenderContent.value = true
+        },
+        onHidden() {
+          shouldRenderContent.value = false
+        }
+      })
 
       return {
         tip,
         tippyOptions,
         singletonInstance,
-        tippyTargetMissing
+        tippyTargetMissing,
+        shouldRenderContent,
       }
     },
     methods: {

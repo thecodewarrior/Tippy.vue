@@ -48,6 +48,10 @@ The name of a `<tippy-singleton>` to bind to. Details on how singleton binding w
 Controls the visibility of the tooltip when the [`trigger`](#trigger) is set to `'manual'`. To manually show/hide the 
 tooltip when using another trigger, use `component.tip.show()` and `component.tip.hide()`
 
+### <code>eager<type op=":"/> <type builtin="boolean"/></code> {#eager}
+
+Controls whether the tooltip content should be rendered eagerly or only when the tooltip is actually visible.
+
 ## Common props
 
 These options are common to both `<tippy>` and `<tippy-singleton>`

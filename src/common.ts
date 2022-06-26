@@ -1,4 +1,4 @@
-import tippy, {Instance as TippyInstance, Props} from "tippy.js";
+import tippy, {Instance as TippyInstance, LifecycleHooks, Props} from "tippy.js";
 import {computed, Ref, ToRefs, toRefs, watch} from "vue";
 import {ComponentPropsOptions, ExtractPropTypes, SetupContext} from "@vue/runtime-core";
 
@@ -24,7 +24,8 @@ export function commonSetup<P extends Plugin[], E extends typeof commonEmits>(
     props: Record<string, unknown>,
     plugins: P,
     baseContext: SetupContext<E>,
-    tip: Ref<TippyInstance | undefined>
+    tip: Ref<TippyInstance | undefined>,
+    hooks?: Partial<LifecycleHooks>,
 ) {
   const context = baseContext as unknown as SetupContext<typeof commonEmits>
 
@@ -37,13 +38,13 @@ export function commonSetup<P extends Plugin[], E extends typeof commonEmits>(
       if(buildFn) buildFn(refs, options)
     }
 
-    options.onShow = injectCallback(options.onShow, instance => context.emit("show", instance))
-    options.onShown = injectCallback(options.onShown, instance => context.emit("shown", instance))
-    options.onHidden = injectCallback(options.onHidden, instance => context.emit("hidden", instance))
-    options.onHide = injectCallback(options.onHide, instance => context.emit("hide", instance))
-    options.onMount = injectCallback(options.onMount, instance => context.emit("mount", instance))
-    options.onTrigger = injectCallback(options.onTrigger, (instance, event) => context.emit("trigger", instance, event))
-    options.onUntrigger = injectCallback(options.onUntrigger, (instance, event) => context.emit("untrigger", instance, event))
+    options.onShow = joinCallbacks(instance => context.emit("show", instance), hooks && hooks.onShow, options.onShow)
+    options.onShown = joinCallbacks(instance => context.emit("shown", instance), hooks && hooks.onShown, options.onShown)
+    options.onHidden = joinCallbacks(instance => context.emit("hidden", instance), hooks && hooks.onHidden, options.onHidden)
+    options.onHide = joinCallbacks(instance => context.emit("hide", instance), hooks && hooks.onHide, options.onHide)
+    options.onMount = joinCallbacks(instance => context.emit("mount", instance), hooks && hooks.onMount, options.onMount)
+    options.onTrigger = joinCallbacks((instance, event) => context.emit("trigger", instance, event), hooks && hooks.onTrigger, options.onTrigger)
+    options.onUntrigger = joinCallbacks((instance, event) => context.emit("untrigger", instance, event), hooks && hooks.onUntrigger, options.onUntrigger)
 
     return options;
   })
@@ -65,14 +66,15 @@ export function commonSetup<P extends Plugin[], E extends typeof commonEmits>(
   }
 }
 
-function injectCallback<Args extends any[], Return>(
-    existing: ((...args: Args) => Return) | undefined,
-    callback: (...args: Args) => Return,
+function joinCallbacks<Args extends any[], Return>(
+    ...callbacks: (((...args: Args) => Return) | undefined)[]
 ): (...args: Args) => Return {
   return (...args: Args) => {
-    let result = callback(...args)
-    if (existing)
-      result = existing(...args)
-    return result
+    let result
+    for(let callback of callbacks) {
+      if(callback)
+        result = callback(...args)
+    }
+    return result as Return
   }
 }

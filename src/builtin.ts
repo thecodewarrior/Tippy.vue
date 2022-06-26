@@ -153,7 +153,7 @@ export const trigger = inferPlugin({
   }
 })
 
-const delayPattern = /^([0-9]+)$|^([0-9]+|-)(?:\s*,\s*([0-9]+|-))?$/
+const delayPattern = /^([0-9]+)$|^([0-9]+|-)\s*,\s*([0-9]+|-)$/
 
 function parseDelay(input: string | number | [number | null, number | null]): number | [number | null, number | null] | undefined {
   if (typeof input === "string") {

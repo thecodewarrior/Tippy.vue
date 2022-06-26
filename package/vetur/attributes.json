@@ -3,6 +3,7 @@
   "tippy/deep-search": {"description": "Whether to search using querySelector - boolean | ''"},
   "tippy/singleton": {"description": "The <tippy-singleton> name - string | ''"},
   "tippy/visible": {"description": "Controls tooltip visibility when trigger == 'manual'"},
+  "tippy/eager": {"description": "Controls whether the tooltip content should be rendered eagerly or only when the tooltip is actually visible. - boolean | ''"},
 
   "tippy-singleton/name": {"description": "The singleton name - string"},
   "tippy-singleton/overrides": {"description": "What properties in the individual tooltips should override the singleton properties - string[]"},
