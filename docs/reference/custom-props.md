@@ -72,3 +72,58 @@ app.component(
     )
 );
 ```
+
+Tippy.vue provides a couple of helper functions for creating plugins. `optionPlugin` exposes a Tippy.js option directly
+as a Vue prop, with an optional default value:
+```js
+import {optionPlugin} from 'tippy.vue';
+const animation = optionPlugin("animation", String, "slide-in")
+```
+`inferPlugin` is primarily used for TypeScript. It improves the code completion when creating plugins by inferring the
+plugin type. Otherwise, you would either have no code completion or have to manually specify the `props` type:
+```ts
+// no type checking
+export const animation = {
+  props: {
+    animation: {
+      type: String,
+      required: false,
+    }
+  },
+  // args are implicitly 'any'
+  build(props, options) {
+    // ...
+  }
+}
+
+export const animation: Plugin<{
+  // unnecessary duplication
+  animation: {
+    type: PropType<String>,
+    required: boolean,
+  }
+}> = {
+  props: {
+    animation: {
+      type: String,
+      required: false,
+    }
+  },
+  build(props, options) {
+    // ...
+  }
+}
+
+// everything is inferred
+export const animation = inferPlugin({
+  props: {
+    animation: {
+      type: String,
+      required: false,
+    }
+  },
+  build(props, options) {
+    // ...
+  }
+})
+```

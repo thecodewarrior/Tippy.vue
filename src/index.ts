@@ -31,6 +31,7 @@ export const Tippy = createTippyComponent(...defaultTippyProps)
 export const TippySingleton = createTippySingletonComponent(...defaultTippySingletonProps)
 
 export type {Plugin, TippyComponentType, TippySingletonComponentType};
+export {inferPlugin, optionPlugin} from './common'
 export {TippyDirective} from "./TippyDirective";
 export {createTippyComponent, defaultTippyProps} from "./Tippy";
 export {createTippySingletonComponent, defaultTippySingletonProps} from "./TippySingleton";

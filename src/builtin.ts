@@ -1,11 +1,8 @@
 import {watch} from "vue";
-import {ComponentPropsOptions, PropType} from "@vue/runtime-core";
-import {CreateSingletonProps, Placement, Props} from "tippy.js";
-import {Plugin} from "./common";
+import {PropType} from "@vue/runtime-core";
+import {CreateSingletonProps, Props} from "tippy.js";
+import {Plugin, optionPlugin, inferPlugin} from "./common";
 
-function inferPlugin<P extends ComponentPropsOptions>(plugin: Plugin<P>): Plugin<P> {
-  return plugin
-}
 
 /**
  * Extra options for tippy.js
@@ -50,20 +47,7 @@ export const enabled = inferPlugin({
 /**
  * Where to place the tooltip relative to the target element
  */
-export const placement = inferPlugin({
-  props: {
-    placement: {
-      type: String as PropType<Placement>,
-      required: false,
-      default: 'top',
-    }
-  },
-  build(props, options) {
-    if (props.placement.value) {
-      options.placement = props.placement.value;
-    }
-  }
-})
+export const placement = optionPlugin("placement", String, 'top')
 
 /**
  * Whether the tippy should be interactive. You don't need to specify a value for this property, its presence is
@@ -71,38 +55,13 @@ export const placement = inferPlugin({
  *
  * This is a shorthand for `interactive: true` in the `extra` property.
  */
-export const interactive = inferPlugin({
-  props: {
-    interactive: {
-      type: Boolean,
-      required: false,
-    }
-  },
-
-  build(props, options) {
-    if (props.interactive.value !== undefined) {
-      options.interactive = props.interactive.value;
-    }
-  }
-})
+export const interactive = optionPlugin("interactive", Boolean)
 
 /**
  * Whether to hide the tooltip when the target element is clicked. Defaults to false when using the `'manual'`
  * trigger, otherwise defaults to true.
  */
-export const hideOnClick = inferPlugin({
-  props: {
-    hideOnClick: {
-      type: Boolean,
-      required: false,
-    },
-  },
-  build(props, options) {
-    if (props.hideOnClick.value !== undefined) {
-      options.hideOnClick = props.hideOnClick.value;
-    }
-  }
-})
+export const hideOnClick = optionPlugin("hideOnClick", Boolean)
 
 /**
  * Whether the tippy should *always* be appended to the `<body>`. You don't need to specify a value for this property,
@@ -248,15 +207,4 @@ export const overrides = inferPlugin({
 /**
  * The CSS transition to use when moving between instances within the singleton
  */
-export const moveTransition = inferPlugin({
-  props: {
-    moveTransition: {
-      type: String,
-      required: false,
-    }
-  },
-  build(props, options) {
-    if (props.moveTransition.value)
-      options.moveTransition = props.moveTransition.value
-  }
-})
+export const moveTransition = optionPlugin("moveTransition", String)

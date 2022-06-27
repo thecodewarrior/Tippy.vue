@@ -1,6 +1,6 @@
 import tippy, {Instance as TippyInstance, LifecycleHooks, Props} from "tippy.js";
 import {computed, Ref, ToRefs, toRefs, watch} from "vue";
-import {ComponentPropsOptions, ExtractPropTypes, SetupContext} from "@vue/runtime-core";
+import {ComponentPropsOptions, ExtractPropTypes, PropType, SetupContext} from "@vue/runtime-core";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const commonEmits = {
@@ -18,6 +18,36 @@ export type Plugin<P extends ComponentPropsOptions = {}> = {
   props: P,
   setup?(props: Required<ToRefs<ExtractPropTypes<P>>> & Record<string, Ref<unknown>>, tip: Ref<TippyInstance | undefined>): void
   build?(props: Required<ToRefs<ExtractPropTypes<P>>> & Record<string, Ref<unknown>>, options: Partial<Props>): void
+}
+
+/**
+ * Infers the plugin type to provide type hinting for the parameter
+ */
+export function inferPlugin<P extends ComponentPropsOptions>(plugin: Plugin<P>): Plugin<P> {
+  return plugin
+}
+
+/**
+ * Creates a plugin that exposes a Tippy.js option as a Vue prop
+ * @param name The name of the Tippy.js option
+ * @param type The type of the Vue property (e.g. `String`, `Boolean`, etc.)
+ * @param def The default value, if any
+ */
+export function optionPlugin<T extends keyof Props>(name: T, type?: PropType<any>, def?: Props[T]): Plugin<Record<T, { type: PropType<Props[T]>, required: false }>> {
+  return {
+    props: {
+      [name]: {
+        type: type ? type : null,
+        required: false,
+        default: def,
+      },
+    } as Record<T, {type: PropType<Props[T]>, required: false, default: typeof def}>,
+    build(props, options) {
+      if (props[name].value !== undefined) {
+        options[name] = props[name].value;
+      }
+    }
+  }
 }
 
 export function commonSetup<P extends Plugin[], E extends typeof commonEmits>(
