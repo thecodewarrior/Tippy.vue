@@ -90,7 +90,7 @@ export function createTippyComponent<P extends Plugin[]>(...plugins: P): TippyCo
     render() {
       return h('div', {
         'tippy-missing-target': this.tippyTargetMissing ? '' : undefined,
-      }, (this.$props.eager || this.shouldRenderContent) && this.$slots.default ? this.$slots.default() : [])
+      }, (this.$props.eager || this.singletonInstance || this.shouldRenderContent) && this.$slots.default ? this.$slots.default() : [])
     },
     setup(props, context) {
       const tip = ref<TippyInstance>()
